@@ -92,6 +92,11 @@ class face_detector:
                 # Show frame on screen
                 cv2.imshow("Face Recognition", frame)
                 
+                if cv2.waitKey(2) == ord('q'):
+                    break
+        self.cap.release()
+        cv2.destroyAllWindows()
+                
     # Method set up new folder
     def setup_folder(self, name_folder):
         # Initial path new folder to set up
@@ -122,7 +127,13 @@ class face_detector:
         self.cap.release()
         cv2.destroyAllWindows()
                 
-                    
+
+def main():
+    obj = face_detector()
+    obj.load_data()
+    obj.face_detection()
+
+main()          
             
             
             
