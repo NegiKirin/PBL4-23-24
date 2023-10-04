@@ -1,31 +1,54 @@
-
+from threading import Thread, Event
+import time
+import datetime
 import socket
+from Commands import Commands
+
 
 class Client:
-    def __init__(self, conn):
+    def __init__(self, conn, detector):
         # attribute of client
-        self.client =  conn
+        self.socket = conn
+        self.detector = detector
+        self.active = True
 
-    def send_list(self, list):
-        try:
-            for x in list:
-                self.client.send(x.encode("utf8"))
-                # waiting response
-                self.client.recv(1024)
-            msg = "end"
-            self.client.send(msg.encode("utf8"))
-            print(list)
-            print('Have send message to client')
-        except socket.error as msg:
-            print(str(msg) + ' Trying to send again...')
-            self.send_list(list)
+        # run
+        self.t = Thread(target=self.run, args=())
+        self.t.setDaemon = True
+        self.t.start()
 
-    def send_str(self, str):
-        try:
-            self.client.send(str.encode("utf8"))
-            self.client.recv(1024)
-        except socket.error as msg:
-            print(str(msg), "Try to send again")
+    def run(self):
+        CommandsSender(self, self.detector)
 
-    def sendFacename(self, list):
-        self.send_list(self, list)
+    def close_socket(self):
+        self.client.close()
+
+
+class CommandsSender:
+    def __init__(self, client, detector):
+        self.client = client
+        self.detector = detector
+
+        # run
+        self.t = Thread(target=self.sendLogFaceDetector, args=())
+        # self.t.setDaemon = True
+        self.t.start()
+
+    def sendLogFaceDetector(self):
+        while True:
+            msg = ''
+            currentTime = datetime.datetime.now()
+            msg = '[' + str(currentTime.year) + '-' + str(currentTime.month) + '-' + str(currentTime.day) + ' ' + str(
+                currentTime.hour) + ':' + str(currentTime.minute) + ':' + str(currentTime.second) + ':' + ']' + ' : '
+            for name in self.detector.face_names:
+                msg = msg + name
+            try:
+                self.client.socket.sendall(str(Commands.LOG_FACE_DETECTOR.value).encode('utf8'))
+                self.client.socket.recv(1024)
+                self.client.socket.sendall(msg.encode("utf8"))
+                self.client.socket.recv(1024)
+            except socket.error as error:
+                self.client.active = False
+                print("Client disconnect")
+                break
+            time.sleep(1)

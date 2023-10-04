@@ -6,14 +6,15 @@ import numpy as np
 import time
 class face_detector:
     
-    def __init__(self):
+    def __init__(self, cam=0):
         self.data_root = '../database'
         self.known_encodings = []
         self.known_names = []
+        self.face_names = []
         self.width = 1280
         self.height = 720
         self.cap = None
-        self.camera = 0
+        self.camera = cam
         self.save_path_folder = None
         
     def load_data(self):
@@ -43,7 +44,7 @@ class face_detector:
                 frame = cv2.flip(frame, 1)
                 
                 # List to saving current name
-                face_names = []
+                # self.face_names = []
                 name = "Unknown"
                 
                 # List to saving face location
@@ -63,7 +64,7 @@ class face_detector:
                 
                 # Encoding current face frame in camera
                 face_encodings = face_recognition.face_encodings(small_frame, face_locations)
-                
+                self.face_names = []
                 for face_encoding in face_encodings:
                     # Checking face => return a list of True, False
                     matches = face_recognition.compare_faces(self.known_encodings, face_encoding)
@@ -77,8 +78,8 @@ class face_detector:
                     if matches[best_match_index] == True and face_distances[best_match_index] <= 0.5:
                         name = self.known_names[best_match_index]
 
-                    face_names.append(name)
-                    for (top, right, bottom, left), name in zip(face_locations, face_names):
+                    self.face_names.append(name)
+                    for (top, right, bottom, left), name in zip(face_locations, self.face_names):
                         # Draw a box around the face and label it
                         cv2.rectangle(frame, (left * 2, top * 2), (right * 2, bottom * 2), (0, 255, 0), 2)
                         
@@ -129,11 +130,10 @@ class face_detector:
                 
 
 def main():
-    obj = face_detector()
+    obj = face_detector(cam=1)
     obj.load_data()
     obj.face_detection()
 
-main()          
             
             
             

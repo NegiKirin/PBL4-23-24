@@ -3,6 +3,8 @@ import threading
 import time
 import HandlerClient
 import Client
+from Module import FaceDetector
+
 class server:
 
     def __init__(self):
@@ -13,13 +15,15 @@ class server:
         self.create_socket()
         self.binding_socket()
         self.listening_socket(1)
-        self.t = threading.Thread(target=self.accept_socket, args=())
-        self.t.setDaemon = True
-        self.t.start()
+        t = threading.Thread(target=self.accept_socket, args=())
+        t.setDaemon = True
+        t.start()
         self.handlerClient = HandlerClient.handlerClient()
-
-    def setFaceName(self, name):
-        self.face_names = name
+        self.detector = FaceDetector.face_detector(cam=1)
+        self.detector.load_data()
+        t1 = threading.Thread(target=self.detector.face_detection, args=())
+        t1.setDaemon = True
+        t1.start()
 
     def create_socket(self):
         try:
@@ -49,26 +53,10 @@ class server:
             try:
                 conn, address = self.soc.accept()
                 print('Establish connection with IP = ' + str(address[0]) + " | PORT = " + str(address[1]))
-                client = Client.Client(conn)
+                client = Client.Client(conn, self.detector)
                 self.handlerClient.appendClient(client)
             except socket.error as msg:
                 print(str(msg) + '\n' + 'Trying to accept...')
-        # Function send message to client
-
-    def send_socket(self, conn):
-        try:
-            for x in self.face_names:
-                conn.sendall(x.encode("utf8"))
-                # waiting response
-                conn.recv(1024)
-            msg = "end"
-            conn.sendall(msg.encode("utf8"))
-            time.sleep(3)
-            print(self.face_names)
-            print('Have send message to client')
-        except socket.error as msg:
-            print(str(msg) + ' Trying to send again...')
-            self.send_socket(conn)
 
     # Function close socket
     def close_socket(self):
@@ -77,3 +65,11 @@ class server:
         except socket.error as msg:
             print(str(msg) + ' Trying to close socket...')
             self.close_socket()
+
+
+def main():
+    sv = server()
+
+
+if __name__ == "__main__":
+    main()

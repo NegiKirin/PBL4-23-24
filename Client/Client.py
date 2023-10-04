@@ -1,12 +1,17 @@
 import socket
-import sys
-import jpysocket
+import threading
+import time
+from Receiver import Receiver
 
 class client:
-    def __init__(self, host='', port=9999):
+    def __init__(self, host="127.0.0.1", port=9999):
         self.host = host
         self.port = port
         self.s = None
+        self.create_socket()
+        self.connect_socket()
+
+        Receiver(self.s)
        
     #Function create socket
     def create_socket(self):
@@ -26,15 +31,6 @@ class client:
             print(str(msg) + ' Trying to connect...')
             self.connect_socket()
 
-    #Function cecieve data from socket server
-    def recieve_socket(self):
-        try:
-            mess = self.s.recv(1024).decode('utf8')
-            print(mess)
-        except socket.error as msg:
-            print(str(msg) + ' Trying to recieve')
-            self.recieve_socket()
-            
     #Function close socket
     def close_socket(self):
         if self.s != None:
@@ -45,13 +41,8 @@ class client:
                 print(str(msg) + ' Trying to close')
                 self.close_socket()
 
-    #Function send data to socket server
-    def send_socket(self, mess):
-        try:
-            mess_encode = jpysocket.jpyencode(mess)
-            self.s.send(mess_encode)
-            print('Send data to server successfully')
-        except socket.error as msg:
-            print(str(msg)+' .Trying to sending again...')
-            self.send_socket()
+def main():
+    c = client()
 
+if __name__ == '__main__':
+    main()
