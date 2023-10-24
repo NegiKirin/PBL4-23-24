@@ -1,6 +1,6 @@
 import typing
 from PyQt6 import QtCore,QtGui, QtWidgets, uic
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, QRect
 from PyQt6.QtWidgets import *
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QWidgetAction, QMenuBar, QMenu, QSizePolicy, QLabel, QVBoxLayout, QWidget 
 from PyQt6.QtGui import QWindow, QScreen,QImage, QPixmap
@@ -13,6 +13,30 @@ matplotlib.use('QtAgg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 
+
+
+# TEST
+import daoTest
+
+class Sorter:
+    def __init__(self, sortName = None, sortBy = None):
+        self.sortName = sortName
+        self.sortBy = sortBy
+
+class Searcher:
+    def __init__(self, searchName = None, search = None):
+        self.searchName = searchName
+        self.search = search
+class PageRequest:
+    def __init__(self, page = None, maxPageItem = None, sorter= None, searcher = None):
+        self.page = page
+        self.maxPageItem = maxPageItem
+        self.sorter = sorter
+        self.searcher = searcher
+    def getOffset(self):
+        if self.page != None & self.maxPageItem != None:
+            return (self.page-1)*self.maxPageItem
+        return None
 
 # cửa sổ 
 class Monitor_w(QMainWindow):
@@ -203,7 +227,7 @@ class List_w(QMainWindow):
         self.button5.setText(str(self.a5))
 
 class History_w(QMainWindow):
-    def __init__(self, widget=None, gui = None):
+    def __init__(self, widget=None, gui = None, select_user = None):
         super(History_w, self).__init__()
         uic=loadUi('History.ui',self)
         self.menu3.clicked.connect(self.loadMenu3)
@@ -219,7 +243,7 @@ class History_w(QMainWindow):
         self.tableHistory.setColumnWidth(2,246)
         self.tableHistory.setColumnWidth(3,246)
         # phân trang
-        self.page=0
+        self.pageable= PageRequest(page=1, maxPageItem=10, searcher=Searcher())
         self.length=0
         self.previousButton.clicked.connect(self.previous)
         self.nextButton.clicked.connect(self.next)
@@ -240,9 +264,9 @@ class History_w(QMainWindow):
     def loadMenu3(self):
         self.widget.setCurrentIndex(2)
     def loadMenu1(self):
-        self.widget.setCurrentIndex(0)
         self.gui.setTimer_Monitor()
         self.gui.setTimer()
+        self.widget.setCurrentIndex(0)
     def loadMenu4(self):
         self.gui.setTimer_Temperature()
         self.widget.setCurrentIndex(3)
@@ -262,19 +286,76 @@ class History_w(QMainWindow):
         self.a4= int(self.button4.text()) +1
         self.a5= int(self.button5.text()) +1
     def previous(self):
-        if self.page != 0:
-            self.page-=1
+        if self.currentPage != 0:
+            self.currentPage-=1
             if int(self.button1.text())>1 :
                 self.decreaseValueButton()
         else:
             return -1
     def next(self):
-        self.page+=1
+        self.pageable.page+=1
         if self.length> int(self.button5.text())*10:
             self.increaseValueButton()
+        self.tableHistory.clearContents()
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
+        print(list)
+        # insert into table
+        row = -1
+        print(len(list))
+        if len(list) ==0:
+            return
+        for eachHistory in list:
+            row += 1
+            id = QtWidgets.QTableWidgetItem(str(row + 1))  # sua
+            self.tableHistory.setItem(row, 0, id)
+            self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
+            self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
+            self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
+        self.tableHistory.verticalHeader().setVisible(False)
+
     def number1(self):
-        self.page = int(self.button1.text()) -1
-        i= self.page+1
+        self.currentPage = int(self.button1.text())
+        i= self.currentPage
+        if i==1:
+            self.a1=1
+            self.a2=2
+            self.a3=3
+            self.a4=4
+            self.a5=5
+        elif i>=2:
+            self.a1= i-2
+            self.a2= i-1
+            self.a3= i
+            self.a4= i+1
+            self.a5= i+2
+        # client send: currentPage, server return List
+        list = daoTest.select_user(currentPage=self.currentPage)
+        print(list)
+        # insert into table
+        self.insert_table(list)
+        self.update_index_page()
+
+    def insert_table(self, list):
+        row = -1
+        for eachHistory in list:
+            row += 1
+            id = QtWidgets.QTableWidgetItem(str(row + 1))  # sua
+            self.tableHistory.setItem(row, 0, id)
+            self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
+            self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
+            self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
+        self.tableHistory.verticalHeader().setVisible(False)
+    def update_index_page(self):
+        # func
+        self.button1.setText(str(self.a1))
+        self.button2.setText(str(self.a2))
+        self.button3.setText(str(self.a3))
+        self.button4.setText(str(self.a4))
+        self.button5.setText(str(self.a5))
+    def number2(self):
+        self.currentPage = int(self.button2.text())-1
+        i= self.currentPage
         if i==2:
             self.a1=1
             self.a2=2
@@ -287,35 +368,20 @@ class History_w(QMainWindow):
             self.a3= i
             self.a4= i+1
             self.a5= i+2
-    def number2(self):
-        self.page = int(self.button2.text())-1
-        i= self.page+1
-        if i==3:
-            self.a1=1
-            self.a2=2
-            self.a3=3
-            self.a4=4
-            self.a5=5
-        elif i>=4:
-            self.a1= i-2
-            self.a2= i-1
-            self.a3= i
-            self.a4= i+1
-            self.a5= i+2
     def number3(self):
-        self.page = int(self.button3.text())-1
-        i= self.page+1
+        self.currentPage = int(self.button3.text())-1
+        i= self.currentPage
     def number4(self):
         self.page = int(self.button4.text())-1
-        i= self.page +1
+        i= self.currentPage +1
         self.a1= i-2
         self.a2= i-1
         self.a3= i
         self.a4= i+1
         self.a5= i+2
     def number5(self):
-        self.page = int(self.button5.text())-1
-        i= self.page +1
+        self.currentPage = int(self.button5.text())-1
+        i= self.currentPage +1
         self.a1= i-2
         self.a2= i-1
         self.a3= i
@@ -371,36 +437,43 @@ class Temperature_w(QMainWindow):
         #KHỞI TẠO ĐỐI TƯỢNG Ở MÀN HÌNH TEMPERATURE
         # Create the maptlotlib FigureCanvas object,
         # which defines a single set of axes as self.axes.
-        self.sc = MplCanvas(self, width=9.41, height=5.01, dpi=100)
-        self.sc.move(280,10)
-        self.X = [0]
-        self.Y = [0]
+        self.temperature = MplCanvas(self.centralwidget, width=9.41, height=5.01, dpi=100)
+        self.temperature.setGeometry(QRect(320, 40, 731, 181))
+        self.humidity = MplCanvas(self.centralwidget, width=9.41, height=5.01, dpi=100)
+        self.humidity.setGeometry(QRect(320, 260, 731, 181))
+        self.X_temperature = [0]
+        self.Y_temperature = [0]
+        self.X_humidity = [0]
+        self.Y_humidity = [0]
         Xmin, Xmax, Ymin, Ymax = 0, 20, 0, 100
-        self.sc.axes.axis([Xmin, Xmax, Ymin, Ymax])
+        self.temperature.axes.axis([Xmin, Xmax, Ymin, Ymax])
+        self.humidity.axes.axis([Xmin, Xmax, Ymin, Ymax])
         # self.sc.axes.plot([0,1,2,3,4], [10,1,20,3,40])
 
     #xử lý chuyển cửa sổ
     def loadMenu2(self):
-        self.sc.axes.clear()
-        self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
+        self.temperature.axes.clear()
+        self.temperature.axes.axis([self.X_temperature[0], self.X_temperature[-1], 0, 100])
 
-        self.X = [self.X[-1]]
-        self.Y = [self.Y[-1]]
+        self.X_temperature = [self.X_temperature[-1]]
+        self.Y_temperature = [self.Y_temperature[-1]]
+        self.gui.temperature_timer.stop()
         self.widget.setCurrentIndex(1)
     def loadMenu3(self):
-        self.sc.axes.clear()
-        self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
+        self.temperature.axes.clear()
+        self.temperature.axes.axis([self.X_temperature[0], self.X_temperature[-1], 0, 100])
 
-        self.X = [self.X[-1]]
-        self.Y = [self.Y[-1]]
+        self.X = [self.X_temperature[-1]]
+        self.Y = [self.Y_temperature[-1]]
+        self.gui.temperature_timer.stop()
         self.widget.setCurrentIndex(2)
     def loadMenu1(self):
 
-        self.sc.axes.clear()
-        self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
+        self.temperature.axes.clear()
+        self.temperature.axes.axis([self.X_temperature[0], self.X_temperature[-1], 0, 100])
 
-        self.X = [self.X[-1]]
-        self.Y = [self.Y[-1]]
+        self.X_temperature = [self.X_temperature[-1]]
+        self.Y_temperature = [self.Y_temperature[-1]]
         self.gui.setTimer_Monitor()
         self.gui.setTimer()
         self.gui.temperature_timer.stop()
@@ -408,20 +481,38 @@ class Temperature_w(QMainWindow):
     def loadMenu5(self):
         sys.exit()
 
-    def setPlot(self):
-        print("print diagram")
-        if(len(self.X) <= 20):
-            self.X.append(self.X[-1] + 1)
-            self.Y.append(np.random.randint(10, 50, size=1)[-1])
+    def plotTemperature(self):
+        print("print diagram Temperature")
+        if (len(self.X_temperature) <= 20):
+            self.X_temperature.append(self.X_temperature[-1] + 1)
+            self.Y_temperature.append(np.random.randint(10, 50, size=1)[-1])
         else:
-            self.X.pop(0)
-            self.X.append(self.X[-1] + 1)
-            self.Y.pop(0)
-            self.Y.append(np.random.randint(10, 50, size=1)[-1])
-            self.sc.axes.clear()
-            self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
-        self.sc.axes.plot(self.X, self.Y, color='red')
-        self.sc.draw()
+            self.X_temperature.pop(0)
+            self.X_temperature.append(self.X_temperature[-1] + 1)
+            self.Y_temperature.pop(0)
+            self.Y_temperature.append(np.random.randint(10, 50, size=1)[-1])
+            self.temperature.axes.clear()
+            self.temperature.axes.axis([self.X_temperature[0], self.X_temperature[-1], 0, 100])
+        self.temperature.axes.plot(self.X_temperature, self.Y_temperature, color='red')
+        self.temperature.draw()
+    def plotHumidity(self):
+        print("print diagram Humidity")
+        if (len(self.X_humidity) <= 20):
+            self.X_humidity.append(self.X_humidity[-1] + 1)
+            self.Y_humidity.append(np.random.randint(10, 50, size=1)[-1])
+        else:
+            self.X_humidity.pop(0)
+            self.X_humidity.append(self.X_humidity[-1] + 1)
+            self.Y_humidity.pop(0)
+            self.Y_humidity.append(np.random.randint(10, 50, size=1)[-1])
+            self.temperature.axes.clear()
+            self.temperature.axes.axis([self.X_humidity[0], self.X_humidity[-1], 0, 100])
+        self.humidity.axes.plot(self.X_humidity, self.Y_humidity, color='red')
+        self.humidity.draw()
+
+    def setPlot(self):
+        self.plotTemperature()
+        self.plotHumidity()
 
 class MplCanvas(FigureCanvasQTAgg):
 
