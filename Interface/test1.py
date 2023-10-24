@@ -65,6 +65,7 @@ gui.setHistory()
 list = [["Tín", "21TCLC_KHDL2", "CNTT"],
         ["Hiếu", "21TCLC_KHDL2", "CNTT"], 
         ["Phúc", "21TCLC_KHDL2", "CNTT"],
+<<<<<<< Updated upstream
         ["Tín", "21TCLC_KHDL2", "CNTT"],
         ["Hiếu", "21TCLC_KHDL2", "CNTT"], 
         ["Phúc", "21TCLC_KHDL2", "CNTT"],
@@ -77,12 +78,29 @@ list = [["Tín", "21TCLC_KHDL2", "CNTT"],
         ["Tín", "21TCLC_KHDL2", "CNTT"],
         ["Hiếu", "21TCLC_KHDL2", "CNTT"], 
         ["Phúc", "21TCLC_KHDL2", "CNTT"],
+=======
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"],
+        ["Phúc", "21TCLC_KHDL2", "CNTT"]
+>>>>>>> Stashed changes
         ]
 gui.setL(list)
 gui.setList()
 gui.setTimer_List()
 #Xử lý Timer:
-gui.setTotalTimer()
+# gui.setTotalTimer()
 
 #HIỂN THỊ BIỂU ĐỔ
 gui.setTemperature()

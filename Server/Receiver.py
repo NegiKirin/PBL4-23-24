@@ -26,7 +26,7 @@ class Receiver:
                 cm = int(self.client.recv(1024).decode('utf8'))
                 self.client.sendall(str(cm).encode('utf8'))
                 print("New command", cm)
-                if cm == Commands.LOG_FACE_DETECTOR.value:
-                    self.receiverLogFaceName()
+                # if cm == Commands.LOG_FACE_DETECTOR.value:
+                #     self.receiverLogFaceName()
             except:
                 print("Receiver error")

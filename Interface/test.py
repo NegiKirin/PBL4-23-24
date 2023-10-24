@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 
 # cửa sổ 
 class Monitor_w(QMainWindow):
-    def __init__(self, widget = None):
+    def __init__(self, widget = None, gui = None):
         super(Monitor_w, self).__init__()
         loadUi('Monitor.ui',self)
         self.menu2.clicked.connect(self.loadMenu2)
@@ -24,12 +24,20 @@ class Monitor_w(QMainWindow):
         self.menu4.clicked.connect(self.loadMenu4)
         self.menu5.clicked.connect(self.loadMenu5)
         self.widget = widget
+        self.gui = gui
     #xử lý chuyển cửa sổ
     def loadMenu2(self):
-        self.widget.setCurrentIndex(1)
+        self.gui.monitor_timer.stop()
+        self.gui.timer.stop()
+        self.gui.widget.setCurrentIndex(1)
     def loadMenu3(self):
+        self.gui.monitor_timer.stop()
+        self.gui.timer.stop()
         self.widget.setCurrentIndex(2)
     def loadMenu4(self):
+        self.gui.setTimer_Temperature()
+        self.gui.monitor_timer.stop()
+        self.gui.timer.stop()
         self.widget.setCurrentIndex(3)
     def loadMenu5(self):
         sys.exit()
@@ -39,7 +47,7 @@ class Monitor_w(QMainWindow):
         self.wet.setText(str(o))
 
 class List_w(QMainWindow):
-    def __init__(self, widget=None):
+    def __init__(self, widget=None, gui = None):
         super(List_w, self).__init__()
         uic=loadUi('List.ui',self)
         self.menu1.clicked.connect(self.loadMenu1)
@@ -47,6 +55,7 @@ class List_w(QMainWindow):
         self.menu4.clicked.connect(self.loadMenu4)
         self.menu5.clicked.connect(self.loadMenu5)
         self.widget = widget
+        self.gui = gui
         self.search.setStyleSheet("border-radius: 10px; padding: 8px;")
         #Ở màn hình List, thiết lập chiều rộng của các cột trong bảng 
         self.tableList.setColumnWidth(0,100)
@@ -74,10 +83,13 @@ class List_w(QMainWindow):
 
     #xử lý chuyển cửa sổ
     def loadMenu1(self):
+        self.gui.setTimer_Monitor()
+        self.gui.setTimer()
         self.widget.setCurrentIndex(0)
     def loadMenu2(self):
         self.widget.setCurrentIndex(1)
     def loadMenu4(self):
+        self.gui.setTimer_Temperature()
         self.widget.setCurrentIndex(3)
     def loadMenu5(self):
         sys.exit()
@@ -192,7 +204,7 @@ class List_w(QMainWindow):
         self.button5.setText(str(self.a5)) 
 
 class History_w(QMainWindow):
-    def __init__(self, widget=None):
+    def __init__(self, widget=None, gui = None):
         super(History_w, self).__init__()
         uic=loadUi('History.ui',self)
         self.menu3.clicked.connect(self.loadMenu3)
@@ -200,6 +212,7 @@ class History_w(QMainWindow):
         self.menu4.clicked.connect(self.loadMenu4)
         self.menu5.clicked.connect(self.loadMenu5)
         self.widget = widget
+        self.gui = gui
         self.search.setStyleSheet("border-radius: 10px; padding: 8px;")
         # Ở màn hình History, định dạng kích thước cột trong table
         self.tableHistory.setColumnWidth(0,100)
@@ -229,7 +242,10 @@ class History_w(QMainWindow):
         self.widget.setCurrentIndex(2)
     def loadMenu1(self):
         self.widget.setCurrentIndex(0)
+        self.gui.setTimer_Monitor()
+        self.gui.setTimer()
     def loadMenu4(self):
+        self.gui.setTimer_Temperature()
         self.widget.setCurrentIndex(3)
     def loadMenu5(self):
         sys.exit()
@@ -345,7 +361,7 @@ class History_w(QMainWindow):
         self.button5.setText(str(self.a5)) 
 
 class Temperature_w(QMainWindow):
-    def __init__(self, widget=None):
+    def __init__(self, widget=None, gui = None):
         super(Temperature_w, self).__init__()
         uic=loadUi('temperature.ui',self)
         self.menu2.clicked.connect(self.loadMenu2)
@@ -353,7 +369,7 @@ class Temperature_w(QMainWindow):
         self.menu1.clicked.connect(self.loadMenu1)
         self.menu5.clicked.connect(self.loadMenu5)
         self.widget = widget
-
+        self.gui = gui
         #KHỞI TẠO ĐỐI TƯỢNG Ở MÀN HÌNH TEMPERATURE
         # Create the maptlotlib FigureCanvas object,
         # which defines a single set of axes as self.axes.
@@ -367,19 +383,41 @@ class Temperature_w(QMainWindow):
 
     #xử lý chuyển cửa sổ
     def loadMenu2(self):
+        self.sc.axes.clear()
+        self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
+
+        self.X = [self.X[-1]]
+        self.Y = [self.Y[-1]]
         self.widget.setCurrentIndex(1)
     def loadMenu3(self):
+        self.sc.axes.clear()
+        self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
+
+        self.X = [self.X[-1]]
+        self.Y = [self.Y[-1]]
         self.widget.setCurrentIndex(2)
     def loadMenu1(self):
+
+        self.sc.axes.clear()
+        self.sc.axes.axis([self.X[0], self.X[-1], 0, 100])
+
+        self.X = [self.X[-1]]
+        self.Y = [self.Y[-1]]
+        self.gui.setTimer_Monitor()
+        self.gui.setTimer()
+        self.gui.temperature_timer.stop()
         self.widget.setCurrentIndex(0)
     def loadMenu5(self):
         sys.exit()
 
     def setPlot(self):
+        print("print diagram")
         if(len(self.X) <= 20):
             self.X.append(self.X[-1] + 1)
             self.Y.append(np.random.randint(10, 50, size=1)[-1])
         else:
+            self.X.pop(0)
+            self.X.append(self.X[-1] + 1)
             self.Y.pop(0)
             self.Y.append(np.random.randint(10, 50, size=1)[-1])
             self.sc.axes.clear()
@@ -404,10 +442,10 @@ class GUI:
         self.widget =QtWidgets.QStackedWidget()
 
         #Lưu 4 hàm cửa sổ widget trên về biến
-        self.Monitor_f= Monitor_w(widget=self.widget)
-        self.History_f = History_w(widget=self.widget)
-        self.List_f = List_w(widget=self.widget)
-        self.Temperature_f = Temperature_w(widget=self.widget)
+        self.Monitor_f= Monitor_w(widget=self.widget, gui=self)
+        self.History_f = History_w(widget=self.widget, gui=self)
+        self.List_f = List_w(widget=self.widget , gui=self)
+        self.Temperature_f = Temperature_w(widget=self.widget, gui=self)
         #add widget vào 
         self.widget.addWidget(self.Monitor_f)      #index0
         self.widget.addWidget(self.History_f)      #index1
@@ -417,11 +455,10 @@ class GUI:
         #tạo một widget Timer để cập nhật dữ liệu
         self.monitor_timer = QTimer()
         self.timer = QTimer()
-        self.history_timer = QTimer()
-        self.list_timer = QTimer()
+        # self.history_timer = QTimer()
+        # self.list_timer = QTimer()
         self.temperature_timer = QTimer()
-        self.total_timer = QTimer()
-        
+
         #KHỞI TẠO ĐỐI TƯỢNG Ở MÀN HÌNH MONITOR     
         #Tạo một Label để load hình ảnh ở Monitor
         self.imagine = QLabel(self.Monitor_f)
@@ -487,50 +524,17 @@ class GUI:
         self.timer.timeout.connect(self.updateCapture)
         self.timer.start(16)
     #ở màn hình history
-    def setTimer_History(self):
-        self.history_timer.timeout.connect(self.setHistory)
-        self.history_timer.start(100) #cập nhật giao diện
-    #ở màn hình list 
-    def setTimer_List(self):
-        self.list_timer.timeout.connect(self.setList)
-        self.list_timer.start(2000) #cập nhật giao diện 5 giây
+    # def setTimer_History(self):
+    #     self.history_timer.timeout.connect(self.setHistory)
+    #     self.history_timer.start(100) #cập nhật giao diện
+    # #ở màn hình list
+    # def setTimer_List(self):
+    #     self.list_timer.timeout.connect(self.setList)
+    #     self.list_timer.start(2000) #cập nhật giao diện 5 giây
     #ở màn hình Temperture
     def setTimer_Temperature(self):
         self.temperature_timer.timeout.connect(self.setTemperature)
         self.temperature_timer.start(1000)
-    def setTotalTimer(self):
-        self.total_timer.timeout.connect(self.stopTimer)
-        self.total_timer.start(2010)
-
-    
-    #HÀM DỪNG TIMER
-    def stopTimer(self):
-        i = self.widget.currentIndex()
-        if i==0: 
-            self.setTimer_Monitor()
-            self.setTimer()
-            self.history_timer.stop()
-            self.list_timer.stop()
-            self.temperature_timer.stop()
-        elif i==1:
-            self.setTimer_History()
-            self.monitor_timer.stop()
-            self.timer.stop()
-            self.list_timer.stop()
-            self.temperature_timer.stop()
-        elif i==2:
-            self.setTimer_List()
-            self.monitor_timer.stop()
-            self.timer.stop()
-            self.history_timer.stop()
-            self.temperature_timer.stop()
-        else:
-            self.setTimer_Temperature()
-            self.monitor_timer.stop()
-            self.timer.stop()
-            self.history_timer.stop()
-            self.list_timer.stop()
-
 
     #HÀM CHÍNH
     def draw(self):
