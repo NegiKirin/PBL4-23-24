@@ -158,32 +158,30 @@ class List_w(QMainWindow):
     def LoadingData(self, list):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
         inf = self.search.text()
-        print(inf)
         if inf =="": 
             self.tableList.setRowCount(10)
             self.length = len(list)
             row=-1
-            for i in range(30*self.page,30*self.page+30,3): 
-                if i<len(list):
+            for eachList in list:
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(int((i/3)+1)))
+                    id = QtWidgets.QTableWidgetItem(str(row+1))
                     self.tableList.setItem(row, 0, id)
-                    self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(list[i]))
-                    self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(list[i+1]))
-                    self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(list[i+2]))
+                    self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
+                    self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
+                    self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(eachList[2]))
             self.tableList.verticalHeader().setVisible(False)
         else:
             row=-1
             #self.tableList.setRowCount(10)
             self.tableList.clearContents()            
-            for i in range(0,len(list), 3): 
-                if (inf in list[i]) or (inf in list[i+1]) or (inf in list[i+2]):
+            for eachList in list:
+                if (inf in eachList[0]) or (inf in list[1]) or (inf in list[2]):
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str((i/3)+1))
+                    id = QtWidgets.QTableWidgetItem(str(row+1))
                     self.tableList.setItem(row, 0, id)
-                    self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(list[i]))
-                    self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(list[i+1]))
-                    self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(list[i+2]))
+                    self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
+                    self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
+                    self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(eachList[2]))
             self.tableList.verticalHeader().setVisible(False)
         #cập nhật giá trị button
         self.button1.setText(str(self.a1)) 
@@ -312,32 +310,30 @@ class History_w(QMainWindow):
     def LoadingData(self, history):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
         inf = self.search.text()
-        print(inf)
         if inf =="": 
             self.tableHistory.setRowCount(10)
             self.length = len(history)
             row=-1
-            for i in range(30*self.page,30*self.page+30,3): 
-                if i<len(history):
+            for eachHistory in history:
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(int((i/3)+1))) #sua
+                    id = QtWidgets.QTableWidgetItem(str(row+1)) #sua
                     self.tableHistory.setItem(row, 0, id)
-                    self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(history[i]))
-                    self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(history[i+1]))
-                    self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(history[i+2]))
+                    self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
+                    self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
+                    self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
             self.tableHistory.verticalHeader().setVisible(False)
         else:
             row=-1
             #self.tableHistory.setRowCount(10)
             self.tableHistory.clearContents()            
-            for i in range(0,len(history),3): 
-                if (inf in history[i]) or (inf in history[i+1]) or (inf in history[i+2]):
+            for eachHistory in history:
+                if (inf in eachHistory[0]) or (inf in eachHistory[1]) or (inf in eachHistory[2]):
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str((i/3)+1)) 
+                    id = QtWidgets.QTableWidgetItem(str(row+1)) 
                     self.tableHistory.setItem(row, 0, id)
-                    self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(history[i]))
-                    self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(history[i+1]))
-                    self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(history[i+2]))
+                    self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
+                    self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
+                    self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
             self.tableHistory.verticalHeader().setVisible(False)
         #cập nhật giá trị button
         self.button1.setText(str(self.a1)) 
@@ -422,6 +418,7 @@ class GUI:
         self.history_timer = QTimer()
         self.list_timer = QTimer()
         self.temperature_timer = QTimer()
+        self.total_timer = QTimer()
         
         #KHỞI TẠO ĐỐI TƯỢNG Ở MÀN HÌNH MONITOR     
         #Tạo một Label để load hình ảnh ở Monitor
@@ -482,35 +479,56 @@ class GUI:
     #CÁC HÀM THIẾT LẬP THỜI GIAN ĐỂ CẬP NHẬT LẠI DỮ LIỆU
     #ở màn hình Monitor
     def setTimer_Monitor(self):
-        i0= self.widget.currentIndex()
-        if i0 ==0:
-            self.monitor_timer.timeout.connect(self.setMonitor)
-            self.monitor_timer.start(2000) #cập nhật giao diện 
+        self.monitor_timer.timeout.connect(self.setMonitor)
+        self.monitor_timer.start(2000) #cập nhật giao diện 
     def setTimer(self):
-        i0= self.widget.currentIndex()
-        if i0 ==0:
-            self.monitor_timer.timeout.connect(self.updateCapture)
-            self.monitor_timer.start(16)
+        self.timer.timeout.connect(self.updateCapture)
+        self.timer.start(16)
     #ở màn hình history
     def setTimer_History(self):
-        i1= self.widget.currentIndex()
-        if i1 ==1:
-            self.monitor_timer.timeout.connect(self.setHistory)
-            self.monitor_timer.start(100) #cập nhật giao diện
+        self.history_timer.timeout.connect(self.setHistory)
+        self.history_timer.start(100) #cập nhật giao diện
     #ở màn hình list 
     def setTimer_List(self):
-        i2= self.widget.currentIndex()
-        if i2 ==2:
-            self.monitor_timer.timeout.connect(self.setList)
-            self.monitor_timer.start(2000) #cập nhật giao diện 5 giây
+        self.list_timer.timeout.connect(self.setList)
+        self.list_timer.start(2000) #cập nhật giao diện 5 giây
     #ở màn hình Temperture
     def setTimer_Temperature(self):
-        i3= self.widget.currentIndex()
-        if i3 ==3:
-            self.temperature_timer.timeout.connect(self.setTemperature)
-            self.temperature_timer.start(1000)
+        self.temperature_timer.timeout.connect(self.setTemperature)
+        self.temperature_timer.start(1000)
+    def setTotalTimer(self):
+        self.total_timer.timeout.connect(self.stopTimer)
+        self.total_timer.start(2010)
+
     
-    
+    #HÀM DỪNG TIMER
+    def stopTimer(self):
+        i = self.widget.currentIndex()
+        if i==0: 
+            self.setTimer_Monitor()
+            self.setTimer()
+            self.history_timer.stop()
+            self.list_timer.stop()
+            self.temperature_timer.stop()
+        elif i==1:
+            self.setTimer_History()
+            self.monitor_timer.stop()
+            self.timer.stop()
+            self.list_timer.stop()
+            self.temperature_timer.stop()
+        elif i==2:
+            self.setTimer_List()
+            self.monitor_timer.stop()
+            self.timer.stop()
+            self.history_timer.stop()
+            self.temperature_timer.stop()
+        else:
+            self.setTimer_Temperature()
+            self.monitor_timer.stop()
+            self.timer.stop()
+            self.history_timer.stop()
+            self.list_timer.stop()
+
 
     #HÀM CHÍNH
     def draw(self):

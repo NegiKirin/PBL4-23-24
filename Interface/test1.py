@@ -36,28 +36,33 @@ t.start()
 
 #HIỂN THỊ VIDEO
 cap = cv2.VideoCapture('video.mp4')
+gui.setTimer()
 t2 = threading.Thread(target=set_frame, args=())
 t2.setDaemon(True)
 t2.start()
-gui.setTimer()
 
 # HIỂN THỊ HISTORY
-history = ["Tín","23-12-9 8:30", "23-12-9 9:30", "Hiếu", "23-12-9 8:30", "23-12-9 9:30", "Phúc", "23-12-9 8:30", "23-12-9 9:30"]
+history = [["Tín","23-12-9 8:30", "23-12-9 9:30"],
+           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+           ["Phúc", "23-12-9 8:30", "23-12-9 9:30"]
+        ]
 gui.setH(history)
 gui.setHistory()
-gui.setTimer_History()
-
+# gui.setTimer_History()
 # HIỂN THỊ LIST
-list = ["Tín", "21TCLC_KHDL2", "CNTT", "Hiếu", "21TCLC_KHDL2", "CNTT", "Phúc", "21TCLC_KHDL2", "CNTT"]
+list = [["Tín", "21TCLC_KHDL2", "CNTT"],
+        ["Hiếu", "21TCLC_KHDL2", "CNTT"], 
+        ["Phúc", "21TCLC_KHDL2", "CNTT"]
+        ]
 gui.setL(list)
 gui.setList()
 gui.setTimer_List()
-
+#Xử lý Timer:
+gui.setTotalTimer()
 
 #HIỂN THỊ BIỂU ĐỔ
 gui.setTemperature()
-gui.setTimer_Temperature()
-
+# gui.setTimer_Temperature()
 gui.exitWin()
 
 
