@@ -57,7 +57,7 @@ class List_w(QMainWindow):
         self.widget = widget
         self.gui = gui
         self.search.setStyleSheet("border-radius: 10px; padding: 8px;")
-        #Ở màn hình List, thiết lập chiều rộng của các cột trong bảng 
+        #Ở màn hình List, thiết lập chiều rộng của các cột trong bảng
         self.tableList.setColumnWidth(0,100)
         self.tableList.setColumnWidth(1,246)
         self.tableList.setColumnWidth(2,246)
@@ -157,7 +157,7 @@ class List_w(QMainWindow):
         self.a2= i-1
         self.a3= i
         self.a4= i+1
-        self.a5= i+2    
+        self.a5= i+2
     def number5(self):
         self.page = int(self.button5.text())-1
         i= self.page +1
@@ -165,19 +165,18 @@ class List_w(QMainWindow):
         self.a2= i-1
         self.a3= i
         self.a4= i+1
-        self.a5= i+2    
+        self.a5= i+2
     #hàm truyền dữ liệu vào để view
     def LoadingData(self, list):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
         inf = self.search.text()
-        if inf =="": 
-            self.tableList.clearContents()  
+        if inf =="":
             self.tableList.setRowCount(10)
             self.length = len(list)
             row=-1
-            for eachList in list[self.page*10 : self.page*10+10 : 1]:
+            for eachList in list:
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1))
+                    id = QtWidgets.QTableWidgetItem(str(row+1))
                     self.tableList.setItem(row, 0, id)
                     self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
                     self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
@@ -186,22 +185,22 @@ class List_w(QMainWindow):
         else:
             row=-1
             #self.tableList.setRowCount(10)
-            self.tableList.clearContents()            
-            for eachList in list[self.page*10 : self.page*10+10 : 1]:
+            self.tableList.clearContents()
+            for eachList in list:
                 if (inf in eachList[0]) or (inf in list[1]) or (inf in list[2]):
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1))
+                    id = QtWidgets.QTableWidgetItem(str(row+1))
                     self.tableList.setItem(row, 0, id)
                     self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
                     self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
                     self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(eachList[2]))
             self.tableList.verticalHeader().setVisible(False)
         #cập nhật giá trị button
-        self.button1.setText(str(self.a1)) 
-        self.button2.setText(str(self.a2)) 
-        self.button3.setText(str(self.a3)) 
-        self.button4.setText(str(self.a4)) 
-        self.button5.setText(str(self.a5)) 
+        self.button1.setText(str(self.a1))
+        self.button2.setText(str(self.a2))
+        self.button3.setText(str(self.a3))
+        self.button4.setText(str(self.a4))
+        self.button5.setText(str(self.a5))
 
 class History_w(QMainWindow):
     def __init__(self, widget=None, gui = None):
@@ -313,7 +312,7 @@ class History_w(QMainWindow):
         self.a2= i-1
         self.a3= i
         self.a4= i+1
-        self.a5= i+2    
+        self.a5= i+2
     def number5(self):
         self.page = int(self.button5.text())-1
         i= self.page +1
@@ -321,20 +320,19 @@ class History_w(QMainWindow):
         self.a2= i-1
         self.a3= i
         self.a4= i+1
-        self.a5= i+2    
-        
+        self.a5= i+2
+
    #hàm truyền dữ liệu vào để view
     def LoadingData(self, history):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
         inf = self.search.text()
-        if inf =="": 
-            self.tableHistory.clearContents()  
+        if inf =="":
             self.tableHistory.setRowCount(10)
             self.length = len(history)
             row=-1
-            for eachHistory in history[self.page*10 : self.page*10+10 : 1]:
+            for eachHistory in history:
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1)) #sua
+                    id = QtWidgets.QTableWidgetItem(str(row+1)) #sua
                     self.tableHistory.setItem(row, 0, id)
                     self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
                     self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
@@ -343,22 +341,22 @@ class History_w(QMainWindow):
         else:
             row=-1
             #self.tableHistory.setRowCount(10)
-            self.tableHistory.clearContents()            
-            for eachHistory in history[self.page*10 : self.page*10+10 : 1]:
+            self.tableHistory.clearContents()
+            for eachHistory in history:
                 if (inf in eachHistory[0]) or (inf in eachHistory[1]) or (inf in eachHistory[2]):
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1)) 
+                    id = QtWidgets.QTableWidgetItem(str(row+1))
                     self.tableHistory.setItem(row, 0, id)
                     self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
                     self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
                     self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
             self.tableHistory.verticalHeader().setVisible(False)
         #cập nhật giá trị button
-        self.button1.setText(str(self.a1)) 
-        self.button2.setText(str(self.a2)) 
-        self.button3.setText(str(self.a3)) 
-        self.button4.setText(str(self.a4)) 
-        self.button5.setText(str(self.a5)) 
+        self.button1.setText(str(self.a1))
+        self.button2.setText(str(self.a2))
+        self.button3.setText(str(self.a3))
+        self.button4.setText(str(self.a4))
+        self.button5.setText(str(self.a5))
 
 class Temperature_w(QMainWindow):
     def __init__(self, widget=None, gui = None):
@@ -446,7 +444,7 @@ class GUI:
         self.History_f = History_w(widget=self.widget, gui=self)
         self.List_f = List_w(widget=self.widget , gui=self)
         self.Temperature_f = Temperature_w(widget=self.widget, gui=self)
-        #add widget vào 
+        #add widget vào
         self.widget.addWidget(self.Monitor_f)      #index0
         self.widget.addWidget(self.History_f)      #index1
         self.widget.addWidget(self.List_f)         #index2
@@ -459,15 +457,15 @@ class GUI:
         # self.list_timer = QTimer()
         self.temperature_timer = QTimer()
 
-        #KHỞI TẠO ĐỐI TƯỢNG Ở MÀN HÌNH MONITOR     
+        #KHỞI TẠO ĐỐI TƯỢNG Ở MÀN HÌNH MONITOR
         #Tạo một Label để load hình ảnh ở Monitor
         self.imagine = QLabel(self.Monitor_f)
         self.imagine.move(270,110)
         self.imagine.resize(981,481)
         #tạo 1 frame
         self.frame = None
-        
-        
+
+
     #HÀM SET DỮ LIỆU
     def setTemp(self, tt, pp):
         self.t= tt
@@ -493,7 +491,7 @@ class GUI:
         self.widget.show()
     #
     def updateCapture(self):
-        # Tạo một video capture 
+        # Tạo một video capture
         try:
             height, width, channel = self.frame.shape
             bytes_per_line = 3 * width
@@ -519,7 +517,7 @@ class GUI:
     #ở màn hình Monitor
     def setTimer_Monitor(self):
         self.monitor_timer.timeout.connect(self.setMonitor)
-        self.monitor_timer.start(2000) #cập nhật giao diện 
+        self.monitor_timer.start(2000) #cập nhật giao diện
     def setTimer(self):
         self.timer.timeout.connect(self.updateCapture)
         self.timer.start(16)
