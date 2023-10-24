@@ -159,12 +159,13 @@ class List_w(QMainWindow):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
         inf = self.search.text()
         if inf =="": 
+            self.tableList.clearContents()  
             self.tableList.setRowCount(10)
             self.length = len(list)
             row=-1
-            for eachList in list:
+            for eachList in list[self.page*10 : self.page*10+10 : 1]:
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(row+1))
+                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1))
                     self.tableList.setItem(row, 0, id)
                     self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
                     self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
@@ -174,10 +175,10 @@ class List_w(QMainWindow):
             row=-1
             #self.tableList.setRowCount(10)
             self.tableList.clearContents()            
-            for eachList in list:
+            for eachList in list[self.page*10 : self.page*10+10 : 1]:
                 if (inf in eachList[0]) or (inf in list[1]) or (inf in list[2]):
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(row+1))
+                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1))
                     self.tableList.setItem(row, 0, id)
                     self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
                     self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
@@ -311,12 +312,13 @@ class History_w(QMainWindow):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
         inf = self.search.text()
         if inf =="": 
+            self.tableHistory.clearContents()  
             self.tableHistory.setRowCount(10)
             self.length = len(history)
             row=-1
-            for eachHistory in history:
+            for eachHistory in history[self.page*10 : self.page*10+10 : 1]:
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(row+1)) #sua
+                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1)) #sua
                     self.tableHistory.setItem(row, 0, id)
                     self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
                     self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
@@ -326,10 +328,10 @@ class History_w(QMainWindow):
             row=-1
             #self.tableHistory.setRowCount(10)
             self.tableHistory.clearContents()            
-            for eachHistory in history:
+            for eachHistory in history[self.page*10 : self.page*10+10 : 1]:
                 if (inf in eachHistory[0]) or (inf in eachHistory[1]) or (inf in eachHistory[2]):
                     row+=1
-                    id = QtWidgets.QTableWidgetItem(str(row+1)) 
+                    id = QtWidgets.QTableWidgetItem(str(self.page*10+row+1)) 
                     self.tableHistory.setItem(row, 0, id)
                     self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
                     self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
