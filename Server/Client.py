@@ -52,3 +52,7 @@ class CommandsSender:
                 print("Client disconnect")
                 break
             time.sleep(1)
+
+    def run(self):
+        self.client.socket.sendall(str(Commands.LOG_FACE_DETECTOR.value).encode('utf8'))
+

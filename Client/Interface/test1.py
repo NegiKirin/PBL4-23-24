@@ -1,4 +1,4 @@
-import test
+import gui
 import time
 import threading
 import cv2
@@ -22,7 +22,7 @@ def set_frame():
         time.sleep(1/24)
 
 #   HIỂN THỊ MÀN HÌNH
-gui = test.GUI() 
+gui = gui.GUI()
 gui.draw()
 gui.setSize()
 
@@ -43,7 +43,7 @@ t2.start()
 
 # HIỂN THỊ HISTORY
 history = [["Tín","23-12-9 8:30", "23-12-9 9:30"],
-           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"],
            ["Phúc", "23-12-9 8:30", "23-12-9 9:30"]
             ]
 gui.setH(history)
@@ -76,7 +76,7 @@ gui.setList()
 # gui.setTotalTimer()
 
 #HIỂN THỊ BIỂU ĐỔ
-gui.setTemperature()
+# gui.setTemperature()
 # gui.setTimer_Temperature()
 gui.exitWin()
 

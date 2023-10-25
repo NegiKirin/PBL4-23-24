@@ -1,22 +1,22 @@
-import typing
-from PyQt6 import QtCore,QtGui, QtWidgets, uic
-from PyQt6.QtCore import Qt, QTimer, QRect
-from PyQt6.QtWidgets import *
-from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QWidgetAction, QMenuBar, QMenu, QSizePolicy, QLabel, QVBoxLayout, QWidget 
-from PyQt6.QtGui import QWindow, QScreen,QImage, QPixmap
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import QTimer, QRect
+from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt6.QtGui import QImage, QPixmap
 from PyQt6.uic import loadUi
-import sys
+import sys, os
 import numpy as np
 
-import matplotlib 
+import matplotlib
 matplotlib.use('QtAgg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 
 
-
-# TEST
+current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
+print(current_directory)
+sys.path.append(current_directory+"..\\")
 import daoTest
+
 
 class Sorter:
     def __init__(self, sortName = None, sortBy = None):
@@ -42,7 +42,7 @@ class PageRequest:
 class Monitor_w(QMainWindow):
     def __init__(self, widget = None, gui = None):
         super(Monitor_w, self).__init__()
-        loadUi('Monitor.ui',self)
+        loadUi(current_directory+'Monitor.ui',self)
         self.menu2.clicked.connect(self.loadMenu2)
         self.menu3.clicked.connect(self.loadMenu3)
         self.menu4.clicked.connect(self.loadMenu4)
@@ -73,7 +73,7 @@ class Monitor_w(QMainWindow):
 class List_w(QMainWindow):
     def __init__(self, widget=None, gui = None):
         super(List_w, self).__init__()
-        uic=loadUi('List.ui',self)
+        uic=loadUi(current_directory+'List.ui',self)
         self.menu1.clicked.connect(self.loadMenu1)
         self.menu2.clicked.connect(self.loadMenu2)
         self.menu4.clicked.connect(self.loadMenu4)
@@ -229,7 +229,7 @@ class List_w(QMainWindow):
 class History_w(QMainWindow):
     def __init__(self, widget=None, gui = None, select_user = None):
         super(History_w, self).__init__()
-        uic=loadUi('History.ui',self)
+        uic=loadUi(current_directory+'History.ui',self)
         self.menu3.clicked.connect(self.loadMenu3)
         self.menu1.clicked.connect(self.loadMenu1)
         self.menu4.clicked.connect(self.loadMenu4)
@@ -427,7 +427,7 @@ class History_w(QMainWindow):
 class Temperature_w(QMainWindow):
     def __init__(self, widget=None, gui = None):
         super(Temperature_w, self).__init__()
-        uic=loadUi('temperature.ui',self)
+        uic=loadUi(current_directory+'temperature.ui',self)
         self.menu2.clicked.connect(self.loadMenu2)
         self.menu3.clicked.connect(self.loadMenu3)
         self.menu1.clicked.connect(self.loadMenu1)
