@@ -51,15 +51,15 @@ class Monitor_w(QMainWindow):
         self.gui = gui
     #xử lý chuyển cửa sổ
     def loadMenu2(self):
-        self.gui.monitor_timer.stop()
+        self.gui.monitor_timer.stop()           #dừng hàm 1 mà set hàm 2 chưa
         self.gui.timer.stop()
         self.gui.widget.setCurrentIndex(1)
     def loadMenu3(self):
-        self.gui.monitor_timer.stop()
+        self.gui.monitor_timer.stop()           #dừng hàm 1 mà set hàm 3 chưa
         self.gui.timer.stop()
         self.widget.setCurrentIndex(2)
     def loadMenu4(self):
-        self.gui.setTimer_Temperature()
+        self.gui.setTimer_Temperature()     #dừng hàm 1 và set cả hàm 4, à là vì hàm này có timer
         self.gui.monitor_timer.stop()
         self.gui.timer.stop()
         self.widget.setCurrentIndex(3)
@@ -80,168 +80,14 @@ class List_w(QMainWindow):
         self.menu5.clicked.connect(self.loadMenu5)
         self.widget = widget
         self.gui = gui
-        self.search.setStyleSheet("border-radius: 10px; padding: 8px;")
+        self.searchInfo.setStyleSheet("border-radius: 10px; padding: 8px;")
         #Ở màn hình List, thiết lập chiều rộng của các cột trong bảng
         self.tableList.setColumnWidth(0,100)
         self.tableList.setColumnWidth(1,246)
         self.tableList.setColumnWidth(2,246)
         self.tableList.setColumnWidth(3,246)
-        # phân trang
-        self.page=0
-        self.length=0
-        self.previousButton.clicked.connect(self.previous)
-        self.nextButton.clicked.connect(self.next)
-        self.button1.clicked.connect(self.number1)
-        self.button2.clicked.connect(self.number2)
-        self.button3.clicked.connect(self.number3)
-        self.button4.clicked.connect(self.number4)
-        self.button5.clicked.connect(self.number5)
-        #khởi tạo giá trị của các button số trang
-        self.a1=1
-        self.a2=2
-        self.a3=3
-        self.a4=4
-        self.a5=5
-        #Tìm kiếm khi nhấn nút enter
-        #self.search.returnPressed.connect(self.LoadingData)
-
-    #xử lý chuyển cửa sổ
-    def loadMenu1(self):
-        self.gui.setTimer_Monitor()
-        self.gui.setTimer()
-        self.widget.setCurrentIndex(0)
-    def loadMenu2(self):
-        self.widget.setCurrentIndex(1)
-    def loadMenu4(self):
-        self.gui.setTimer_Temperature()
-        self.widget.setCurrentIndex(3)
-    def loadMenu5(self):
-        sys.exit()
-    #xử lý phân trang của view
-    def decreaseValueButton(self):
-        self.a1= int(self.button1.text()) -1
-        self.a2= int(self.button2.text()) -1
-        self.a3= int(self.button3.text()) -1
-        self.a4= int(self.button4.text()) -1
-        self.a5= int(self.button5.text()) -1
-    def increaseValueButton(self):
-        self.a1= int(self.button1.text()) +1
-        self.a2= int(self.button2.text()) +1
-        self.a3= int(self.button3.text()) +1
-        self.a4= int(self.button4.text()) +1
-        self.a5= int(self.button5.text()) +1
-    def previous(self):
-        if self.page != 0:
-            self.page-=1
-            if int(self.button1.text())>1 :
-                self.decreaseValueButton()
-        else:
-            return -1
-    def next(self):
-        self.page+=1
-        if self.length> int(self.button5.text())*10:
-            self.increaseValueButton()
-    def number1(self):
-        self.page = int(self.button1.text()) -1
-        i= self.page+1
-        if i==2:
-            self.a1=1
-            self.a2=2
-            self.a3=3
-            self.a4=4
-            self.a5=5
-        elif i>=3:
-            self.a1= i-2
-            self.a2= i-1
-            self.a3= i
-            self.a4= i+1
-            self.a5= i+2
-    def number2(self):
-        self.page = int(self.button2.text())-1
-        i= self.page+1
-        if i==3:
-            self.a1=1
-            self.a2=2
-            self.a3=3
-            self.a4=4
-            self.a5=5
-        elif i>=4:
-            self.a1= i-2
-            self.a2= i-1
-            self.a3= i
-            self.a4= i+1
-            self.a5= i+2
-    def number3(self):
-        self.page = int(self.button3.text())-1
-        i= self.page+1
-    def number4(self):
-        self.page = int(self.button4.text())-1
-        i= self.page +1
-        self.a1= i-2
-        self.a2= i-1
-        self.a3= i
-        self.a4= i+1
-        self.a5= i+2
-    def number5(self):
-        self.page = int(self.button5.text())-1
-        i= self.page +1
-        self.a1= i-2
-        self.a2= i-1
-        self.a3= i
-        self.a4= i+1
-        self.a5= i+2
-    #hàm truyền dữ liệu vào để view
-    def LoadingData(self, list):
-        #kiểm tra trong lineEdit search đã có thông tin gì chưa
-        inf = self.search.text()
-        if inf =="":
-            self.tableList.setRowCount(10)
-            self.length = len(list)
-            row=-1
-            for eachList in list:
-                    row+=1
-                    id = QtWidgets.QTableWidgetItem(str(row+1))
-                    self.tableList.setItem(row, 0, id)
-                    self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
-                    self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
-                    self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(eachList[2]))
-            self.tableList.verticalHeader().setVisible(False)
-        else:
-            row=-1
-            #self.tableList.setRowCount(10)
-            self.tableList.clearContents()
-            for eachList in list:
-                if (inf in eachList[0]) or (inf in list[1]) or (inf in list[2]):
-                    row+=1
-                    id = QtWidgets.QTableWidgetItem(str(row+1))
-                    self.tableList.setItem(row, 0, id)
-                    self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
-                    self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
-                    self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(eachList[2]))
-            self.tableList.verticalHeader().setVisible(False)
-        #cập nhật giá trị button
-        self.button1.setText(str(self.a1))
-        self.button2.setText(str(self.a2))
-        self.button3.setText(str(self.a3))
-        self.button4.setText(str(self.a4))
-        self.button5.setText(str(self.a5))
-
-class History_w(QMainWindow):
-    def __init__(self, widget=None, gui = None, select_user = None):
-        super(History_w, self).__init__()
-        uic=loadUi('History.ui',self)
-        self.menu3.clicked.connect(self.loadMenu3)
-        self.menu1.clicked.connect(self.loadMenu1)
-        self.menu4.clicked.connect(self.loadMenu4)
-        self.menu5.clicked.connect(self.loadMenu5)
-        self.widget = widget
-        self.gui = gui
-        self.search.setStyleSheet("border-radius: 10px; padding: 8px;")
-        # Ở màn hình History, định dạng kích thước cột trong table
-        self.tableHistory.setColumnWidth(0,100)
-        self.tableHistory.setColumnWidth(1,246)
-        self.tableHistory.setColumnWidth(2,246)
-        self.tableHistory.setColumnWidth(3,246)
+        #làm mới
+        self.refreshButton.clicked.connect(self.refresh)
         # phân trang
         self.pageable= PageRequest(page=1, maxPageItem=10, searcher=Searcher())
         self.length=0
@@ -259,20 +105,56 @@ class History_w(QMainWindow):
         self.a4=4
         self.a5=5
         #Tìm kiếm khi nhấn nút enter
-        #self.search.returnPressed.connect(self.LoadingData)
+        self.searchInfo.returnPressed.connect(self.search)
+
     #xử lý chuyển cửa sổ
-    def loadMenu3(self):
-        self.widget.setCurrentIndex(2)
     def loadMenu1(self):
         self.gui.setTimer_Monitor()
         self.gui.setTimer()
         self.widget.setCurrentIndex(0)
+    def loadMenu2(self):
+        self.widget.setCurrentIndex(1)
     def loadMenu4(self):
         self.gui.setTimer_Temperature()
         self.widget.setCurrentIndex(3)
     def loadMenu5(self):
         sys.exit()
+
+    #làm mới
+    def refresh(self):
+        self.pageable.searcher.search = None
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
+        # insert into table
+        self.insert_table(list)
+        self.update_index_page()
+
+    #tìm kiếm
+    def search(self):
+        self.pageable.searcher.search= self.searchInfo.text()
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
+        # insert into table
+        self.insert_table(list)
     #xử lý phân trang của view
+    def insert_table(self, list):
+        row = -1
+        self.tableList.clearContents()
+        for eachList in list:
+            row += 1
+            id = QtWidgets.QTableWidgetItem(str((self.pageable.page-1)*10 +row + 1))  # sua
+            self.tableList.setItem(row, 0, id)
+            self.tableList.setItem(row, 1, QtWidgets.QTableWidgetItem(eachList[0]))
+            self.tableList.setItem(row, 2, QtWidgets.QTableWidgetItem(eachList[1]))
+            self.tableList.setItem(row, 3, QtWidgets.QTableWidgetItem(eachList[2]))
+        self.tableList.verticalHeader().setVisible(False)
+    def update_index_page(self):
+        # func
+        self.button1.setText(str(self.a1))
+        self.button2.setText(str(self.a2))
+        self.button3.setText(str(self.a3))
+        self.button4.setText(str(self.a4))
+        self.button5.setText(str(self.a5))
     def decreaseValueButton(self):
         self.a1= int(self.button1.text()) -1
         self.a2= int(self.button2.text()) -1
@@ -286,17 +168,29 @@ class History_w(QMainWindow):
         self.a4= int(self.button4.text()) +1
         self.a5= int(self.button5.text()) +1
     def previous(self):
-        if self.currentPage != 0:
-            self.currentPage-=1
-            if int(self.button1.text())>1 :
+        if self.pageable.page != 1:
+            self.pageable.page -=1
+            if int(self.button1.text())>=2 :
                 self.decreaseValueButton()
+                self.update_index_page()
+            # client send: currentPage, server return List
+            list = daoTest.select_user(pageable=self.pageable)
+            # insert into table
+            row = -1
+            print(len(list))
+            if len(list) ==0:
+                return
+            self.insert_table(list)
+            self.update_index_page()
         else:
-            return -1
+            return 
     def next(self):
         self.pageable.page+=1
-        if self.length> int(self.button5.text())*10:
+        print(self.pageable.page)
+        if self.pageable.page>=5:          
             self.increaseValueButton()
-        self.tableHistory.clearContents()
+            self.update_index_page()
+        self.tableList.clearContents()
         # client send: currentPage, server return List
         list = daoTest.select_user(pageable=self.pageable)
         print(list)
@@ -305,42 +199,153 @@ class History_w(QMainWindow):
         print(len(list))
         if len(list) ==0:
             return
-        for eachHistory in list:
-            row += 1
-            id = QtWidgets.QTableWidgetItem(str(row + 1))  # sua
-            self.tableHistory.setItem(row, 0, id)
-            self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
-            self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
-            self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
-        self.tableHistory.verticalHeader().setVisible(False)
-
+        self.insert_table(list)
+        self.update_index_page()
     def number1(self):
-        self.currentPage = int(self.button1.text())
-        i= self.currentPage
-        if i==1:
-            self.a1=1
+        self.pageable.page = int(self.button1.text())
+        i= self.pageable.page
+        if i==1 or i==2:
+            self.a1=1           # Note phần này có thể cho vô hàm riêng
             self.a2=2
             self.a3=3
             self.a4=4
             self.a5=5
-        elif i>=2:
+        elif i>=3:
             self.a1= i-2
             self.a2= i-1
             self.a3= i
             self.a4= i+1
             self.a5= i+2
         # client send: currentPage, server return List
-        list = daoTest.select_user(currentPage=self.currentPage)
-        print(list)
+        list = daoTest.select_user(pageable=self.pageable)
+        # insert into table
+        self.insert_table(list)
+        self.update_index_page()
+    def number2(self):
+        self.pageable.page = int(self.button2.text())
+        i= self.pageable.page
+        if i==2 or i==3:
+            self.a1=1
+            self.a2=2
+            self.a3=3
+            self.a4=4
+            self.a5=5
+        elif i>=4:
+            self.a1= i-2
+            self.a2= i-1
+            self.a3= i
+            self.a4= i+1
+            self.a5= i+2
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
+    def number3(self):
+        self.pageable.page = int(self.button3.text())
+        i= self.pageable.page
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
+    def number4(self):
+        self.pageable.page = int(self.button4.text())
+        i= self.pageable.page
+        self.a1= i-2
+        self.a2= i-1
+        self.a3= i
+        self.a4= i+1
+        self.a5= i+2
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
+    def number5(self):
+        self.pageable.page = int(self.button5.text())-1
+        i= self.pageable.page +1
+        self.a1= i-2
+        self.a2= i-1
+        self.a3= i
+        self.a4= i+1
+        self.a5= i+2
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
+    #hàm truyền dữ liệu vào để view
+    def LoadingData(self, list):
+            self.tableList.setRowCount(10)
+            self.insert_table(list=list)
+            self.update_index_page()
+class History_w(QMainWindow):
+    def __init__(self, widget=None, gui = None, select_user = None):
+        super(History_w, self).__init__()
+        uic=loadUi('History.ui',self)
+        self.menu3.clicked.connect(self.loadMenu3)
+        self.menu1.clicked.connect(self.loadMenu1)
+        self.menu4.clicked.connect(self.loadMenu4)
+        self.menu5.clicked.connect(self.loadMenu5)
+        self.widget = widget
+        self.gui = gui
+        self.searchInfo.setStyleSheet("border-radius: 10px; padding: 8px;")
+        # Ở màn hình History, định dạng kích thước cột trong table
+        self.tableHistory.setColumnWidth(0,100)
+        self.tableHistory.setColumnWidth(1,246)
+        self.tableHistory.setColumnWidth(2,246)
+        self.tableHistory.setColumnWidth(3,246)
+        #làm mới
+        self.refreshButton.clicked.connect(self.refresh)
+        # phân trang
+        self.pageable= PageRequest(page=1, maxPageItem=10, searcher=Searcher())
+        self.length=0
+        self.previousButton.clicked.connect(self.previous)
+        self.nextButton.clicked.connect(self.next)
+        self.button1.clicked.connect(self.number1)
+        self.button2.clicked.connect(self.number2)
+        self.button3.clicked.connect(self.number3)
+        self.button4.clicked.connect(self.number4)
+        self.button5.clicked.connect(self.number5)
+        #khởi tạo giá trị của các button số trang
+        self.a1=1
+        self.a2=2
+        self.a3=3
+        self.a4=4
+        self.a5=5
+        #Tìm kiếm khi nhấn nút enter
+        self.searchInfo.returnPressed.connect(self.search)
+    #xử lý chuyển cửa sổ
+    def loadMenu3(self):
+        self.widget.setCurrentIndex(2)
+    def loadMenu1(self):
+        self.gui.setTimer_Monitor()
+        self.gui.setTimer()
+        self.widget.setCurrentIndex(0)
+    def loadMenu4(self):
+        self.gui.setTimer_Temperature()
+        self.widget.setCurrentIndex(3)
+    def loadMenu5(self):
+        sys.exit()
+
+    #làm mới
+    def refresh(self):
+        self.pageable.searcher.search = None
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
         # insert into table
         self.insert_table(list)
         self.update_index_page()
 
+    #tìm kiếm
+    def search(self):
+        self.pageable.searcher.search= self.searchInfo.text()
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
+        # insert into table
+        self.insert_table(list)
+
+
+    #xử lý phân trang của view
     def insert_table(self, list):
         row = -1
+        self.tableHistory.clearContents()
         for eachHistory in list:
             row += 1
-            id = QtWidgets.QTableWidgetItem(str(row + 1))  # sua
+            id = QtWidgets.QTableWidgetItem(str((self.pageable.page-1)*10 +row + 1))  # sua
             self.tableHistory.setItem(row, 0, id)
             self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
             self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
@@ -353,11 +358,73 @@ class History_w(QMainWindow):
         self.button3.setText(str(self.a3))
         self.button4.setText(str(self.a4))
         self.button5.setText(str(self.a5))
-    def number2(self):
-        self.currentPage = int(self.button2.text())-1
-        i= self.currentPage
-        if i==2:
-            self.a1=1
+    def decreaseValueButton(self):
+        self.a1= int(self.button1.text()) -1
+        self.a2= int(self.button2.text()) -1
+        self.a3= int(self.button3.text()) -1
+        self.a4= int(self.button4.text()) -1
+        self.a5= int(self.button5.text()) -1
+    def increaseValueButton(self):
+        self.a1= int(self.button1.text()) +1
+        self.a2= int(self.button2.text()) +1
+        self.a3= int(self.button3.text()) +1
+        self.a4= int(self.button4.text()) +1
+        self.a5= int(self.button5.text()) +1
+    def previous(self):
+        if self.pageable.page != 1:
+            self.pageable.page-=1
+            print(self.pageable.page)
+            if int(self.button1.text())>=2:       
+                self.decreaseValueButton()
+                self.update_index_page()
+            self.tableHistory.clearContents()
+            # client send: currentPage, server return List
+            list = daoTest.select_user(pageable=self.pageable)
+            # insert into table
+            row = -1
+            print(len(list))
+            if len(list) ==0:
+                return
+            for eachHistory in list:
+                row += 1
+                id = QtWidgets.QTableWidgetItem(str((self.pageable.page-1)*10 +row + 1))  
+                self.tableHistory.setItem(row, 0, id)
+                self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
+                self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
+                self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
+            self.tableHistory.verticalHeader().setVisible(False)
+        else:
+            return 
+        
+    def next(self):
+        self.pageable.page+=1
+        print(self.pageable.page)
+        if self.pageable.page>=5:          
+            self.increaseValueButton()
+            self.update_index_page()
+        self.tableHistory.clearContents()
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
+        print(list)
+        # insert into table
+        row = -1
+        print(len(list))
+        if len(list) ==0:
+            return
+        for eachHistory in list:
+            row += 1
+            id = QtWidgets.QTableWidgetItem(str((self.pageable.page-1)*10 +row + 1))  
+            self.tableHistory.setItem(row, 0, id)
+            self.tableHistory.setItem(row, 1, QtWidgets.QTableWidgetItem(eachHistory[0]))
+            self.tableHistory.setItem(row, 2, QtWidgets.QTableWidgetItem(eachHistory[1]))
+            self.tableHistory.setItem(row, 3, QtWidgets.QTableWidgetItem(eachHistory[2]))
+        self.tableHistory.verticalHeader().setVisible(False)
+
+    def number1(self):
+        self.pageable.page = int(self.button1.text())
+        i= self.pageable.page
+        if i==1 or i==2:
+            self.a1=1           # Note phần này có thể cho vô hàm riêng
             self.a2=2
             self.a3=3
             self.a4=4
@@ -368,30 +435,63 @@ class History_w(QMainWindow):
             self.a3= i
             self.a4= i+1
             self.a5= i+2
+        # client send: currentPage, server return List
+        list = daoTest.select_user(pageable=self.pageable)
+        # insert into table
+        self.insert_table(list)
+        self.update_index_page()
+
+    def number2(self):
+        self.pageable.page = int(self.button2.text())
+        i= self.pageable.page
+        if i==2 or i==3:
+            self.a1=1
+            self.a2=2
+            self.a3=3
+            self.a4=4
+            self.a5=5
+        elif i>=4:
+            self.a1= i-2
+            self.a2= i-1
+            self.a3= i
+            self.a4= i+1
+            self.a5= i+2
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
     def number3(self):
-        self.currentPage = int(self.button3.text())-1
-        i= self.currentPage
+        self.pageable.page = int(self.button3.text())
+        i= self.pageable.page
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
     def number4(self):
-        self.page = int(self.button4.text())-1
-        i= self.currentPage +1
+        self.pageable.page = int(self.button4.text())
+        i= self.pageable.page
         self.a1= i-2
         self.a2= i-1
         self.a3= i
         self.a4= i+1
         self.a5= i+2
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
     def number5(self):
-        self.currentPage = int(self.button5.text())-1
-        i= self.currentPage +1
+        self.pageable.page = int(self.button5.text())-1
+        i= self.pageable.page +1
         self.a1= i-2
         self.a2= i-1
         self.a3= i
         self.a4= i+1
         self.a5= i+2
+        list = daoTest.select_user(pageable=self.pageable)
+        self.insert_table(list)
+        self.update_index_page()
 
    #hàm truyền dữ liệu vào để view
     def LoadingData(self, history):
         #kiểm tra trong lineEdit search đã có thông tin gì chưa
-        inf = self.search.text()
+        inf = self.searchInfo.text()
         if inf =="":
             self.tableHistory.setRowCount(10)
             self.length = len(history)
