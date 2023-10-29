@@ -7,6 +7,7 @@ import time
 class face_detector:
     
     def __init__(self, cam=0):
+        self.img = None
         self.data_root = '../database'
         self.known_encodings = []
         self.known_names = []
@@ -92,7 +93,7 @@ class face_detector:
 
                 # Show frame on screen
                 cv2.imshow("Face Recognition", frame)
-                
+                self.img = frame
                 if cv2.waitKey(2) == ord('q'):
                     break
         self.cap.release()

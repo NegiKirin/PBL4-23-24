@@ -59,7 +59,7 @@ history = [["Tín","23-12-9 8:30", "23-12-9 9:30"],
            ["Phúc", "23-12-9 8:30", "23-12-9 9:30"],
             ]
 gui.setH(history)
-gui.setHistory()
+# gui.setHistory()
 # gui.setTimer_History()
 # HIỂN THỊ LIST
 list = [["Tín", "21TCLC_KHDL2", "CNTT"],
@@ -82,7 +82,7 @@ list = [["Tín", "21TCLC_KHDL2", "CNTT"],
         ["Phúc", "21TCLC_KHDL2", "CNTT"]
         ]
 gui.setL(list)
-gui.setList()
+# gui.setList()
 # gui.setTimer_List()
 #Xử lý Timer:
 # gui.setTotalTimer()

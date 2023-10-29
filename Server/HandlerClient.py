@@ -23,6 +23,7 @@ class handlerClient:
             for client in self.clients:
                 if client.active == False:
                     self.removeClient(client)
+                    print("remove client")
             time.sleep(1)
 
     def sendListForAllClient(self, list):
