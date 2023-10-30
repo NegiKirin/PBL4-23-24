@@ -431,7 +431,7 @@ class History_w(QMainWindow):
 class History_w(QMainWindow):
     def __init__(self, widget=None, gui = None, select_user = None):
         super(History_w, self).__init__()
-        uic=loadUi('History.ui',self)
+        uic=loadUi(current_directory+'History.ui',self)
         self.menu3.clicked.connect(self.loadMenu3)
         self.menu1.clicked.connect(self.loadMenu1)
         self.menu4.clicked.connect(self.loadMenu4)
