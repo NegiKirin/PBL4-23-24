@@ -35,62 +35,60 @@ t.setDaemon(True)
 t.start()
 
 #HIỂN THỊ VIDEO
-cap = cv2.VideoCapture('video.mp4')
+cap = cv2.VideoCapture(0)
 gui.setTimer()
 t2 = threading.Thread(target=set_frame, args=())
 t2.setDaemon(True)
 t2.start()
 
-# HIỂN THỊ HISTORY
-history = [["Tín","23-12-9 8:30", "23-12-9 9:30"],
-           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
-           ["Phúc", "23-12-9 8:30", "23-12-9 9:30"],
-           ["Tín","23-12-9 8:30", "23-12-9 9:30"],
-           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
-           ["Phúc", "23-12-9 8:30", "23-12-9 9:30"],
-           ["Tín","23-12-9 8:30", "23-12-9 9:30"],
-           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
-           ["Phúc", "23-12-9 8:30", "23-12-9 9:30"],
-           ["Tín","23-12-9 8:30", "23-12-9 9:30"],
-           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
-           ["Phúc", "23-12-9 8:30", "23-12-9 9:30"],
-           ["Tín","23-12-9 8:30", "23-12-9 9:30"],
-           ["Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
-           ["Phúc", "23-12-9 8:30", "23-12-9 9:30"],
-            ]
-gui.setH(history)
+# # HIỂN THỊ HISTORY
+# history = [["0","Tín","23-12-9 8:30", "23-12-9 9:30"],
+#            ["1","Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+#            ["2","Phúc", "23-12-9 8:30", "23-12-9 9:30"],
+#            ["3","Tín","23-12-9 8:30", "23-12-9 9:30"],
+#            ["4","Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+#            ["5","Phúc", "23-12-9 8:30", "23-12-9 9:30"],
+#            ["6","Tín","23-12-9 8:30", "23-12-9 9:30"],
+#            ["7","Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+#            ["8","Phúc", "23-12-9 8:30", "23-12-9 9:30"],
+#            ["9","Tín","23-12-9 8:30", "23-12-9 9:30"],
+#            ["10","Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+#            ["11","Phúc", "23-12-9 8:30", "23-12-9 9:30"],
+#            ["12","Tín","23-12-9 8:30", "23-12-9 9:30"],
+#            ["12","Hiếu", "23-12-9 8:30", "23-12-9 9:30"], 
+#            ["14","Phúc", "23-12-9 8:30", "23-12-9 9:30"],
+#             ]
+# gui.setH(history)
 # gui.setHistory()
-# gui.setTimer_History()
+
 # HIỂN THỊ LIST
-list = [["Tín", "21TCLC_KHDL2", "CNTT"],
-        ["Hiếu", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"],
-        ["Phúc", "21TCLC_KHDL2", "CNTT"]
-        ]
-gui.setL(list)
+# list = [["1","Tín", "21TCLC_KHDL2", "CNTT"],
+#         ["2","Hiếu", "21TCLC_KHDL2", "CNTT"],
+#         ["3","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["4","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["5","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["6","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["7","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["8","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["9","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["10","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["11","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["12","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["13","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["14","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["15","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["16","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["17","Phúc", "21TCLC_KHDL2", "CNTT"],
+#         ["18","Phúc", "21TCLC_KHDL2", "CNTT"]
+#         ]
+# gui.setL(list)
 # gui.setList()
-# gui.setTimer_List()
-#Xử lý Timer:
-# gui.setTotalTimer()
+
+
 
 #HIỂN THỊ BIỂU ĐỔ
 # gui.setTemperature()
 # gui.setTimer_Temperature()
 gui.exitWin()
-
 
 
