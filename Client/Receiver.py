@@ -53,18 +53,35 @@ class Receiver:
         except socket.error as msg:
             print(str(msg))
 
+    def receiveHumidityAndTemperature(self):
+        try:
+            msg = self.client.recv(1024).decode('utf8')
+            msg = msg.split(':')
+            humidity = msg[0]
+            temperature = msg[1]
+            return [humidity, temperature]
+        except socket.error as error:
+            print(str(error))
+
+    def start(self):
+        self.client.sendall("START".encode('utf8'))
+        self.client.recv(1024)
+        t = threading.Thread(target=self.run, args=())
+        t.setDaemon = True
+        t.start()
 
     def run(self):
         while True:
             try:
                 self.client.sendall(str(self.cm).encode('utf8'))
                 print("send command: ", self.cm)
-                self.client.recv(1024)
-
+                # self.client.recv(1024)
                 if self.cm == Commands.LOG_FACE_DETECTOR.value:
                     self.receiverLogFaceName()
                 elif self.cm == Commands.IMAGE.value:
                     self.receiverImage()
+                    self.client.sendall('OK'.encode('utf8'))
+                    print(self.receiveHumidityAndTemperature())
             except socket.error as msg:
                 print(str(msg))
                 print("Receiver error")

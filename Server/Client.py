@@ -5,6 +5,7 @@ import socket
 from Commands import Commands
 import pickle
 import struct
+import numpy as np
 
 class Client:
     def __init__(self, conn, detector):
@@ -65,14 +66,25 @@ class CommandsSender:
             print("client disconnect")
 
 
+    def sendHumidityAndTemperature(self):
+        try:
+            humidity = 2
+            temperature = 10
+            msg = str(humidity) + ":" + str(temperature)
+            self.client.socket.sendall(msg.encode('utf8'))
+        except socket.error as error:
+            print(str(error))
 
+    def wait(self):
+        self.client.socket.recv(1024)
+        self.client.socket.sendall("OK".encode('utf8'))
 
     def run(self):
         while True:
             print("Waiting command")
             try:
                 cm = self.client.socket.recv(1024)
-                self.client.socket.sendall(cm)
+                # self.client.socket.sendall(cm)
                 cm = int(cm.decode('utf8'))
                 print("New command", cm)
                 # self.cm = self.client.socket.recv(1024).decode('utf8')
@@ -80,6 +92,8 @@ class CommandsSender:
                     self.sendLogFaceDetector()
                 elif cm == Commands.IMAGE.value:
                     self.sendImage()
+                    self.client.socket.recv(1024)
+                    self.sendHumidityAndTemperature()
             except socket.error as error:
                 print(str(error))
                 self.client.active = False
