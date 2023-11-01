@@ -15,8 +15,8 @@ current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
 print(current_directory)
 sys.path.append(current_directory)
 from Pageable import PageRequest
-sys.path.append(current_directory+"..\\")
-import daoTest
+# sys.path.append(current_directory+"..\\")
+# import daoTest
 
 
 
