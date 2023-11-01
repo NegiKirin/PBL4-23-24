@@ -28,14 +28,14 @@ gui.setSize()
 
 #HIỂN THỊ NHIỆT ĐỘ ĐỘ ẨM - REAL TIME
 gui.setTemp('22','56%')
-gui.setMonitor()
+# gui.setMonitor()
 gui.setTimer_Monitor()
 t = threading.Thread(target=setT, args=[])
 t.setDaemon(True)
 t.start()
 
 #HIỂN THỊ VIDEO
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 gui.setTimer()
 t2 = threading.Thread(target=set_frame, args=())
 t2.setDaemon(True)

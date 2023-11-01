@@ -2,6 +2,8 @@ import socket
 import threading
 import time
 from Receiver import Receiver
+import Interface.gui as itf
+
 
 class client:
     def __init__(self, host="127.0.0.1", port=9999):
@@ -11,8 +13,14 @@ class client:
         self.create_socket()
         self.connect_socket()
 
-        Receiver(self.s)
-       
+        self.receiver = Receiver(self.s)
+        self.gui = itf.GUI(receiver=self.receiver)
+        self.receiver.setGUI(self.gui)
+        self.receiver.start()
+
+        self.gui.draw()
+
+
     #Function create socket
     def create_socket(self):
         try:

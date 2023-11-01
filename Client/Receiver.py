@@ -4,15 +4,17 @@ import cv2
 import struct
 import pickle
 from Commands import Commands
-
+HEADERSIZE = 10
 class Receiver:
     def __init__(self, client):
         self.client = client
         # commands default
         self.cm = -2
-        t = threading.Thread(target=self.run, args=())
-        t.setDaemon = True
-        t.start()
+
+        self.pageable = None
+
+    def setGUI(self, gui):
+        self.gui = gui
 
     def receiverLogFaceName(self):
         while True:
@@ -48,24 +50,118 @@ class Receiver:
             frame = pickle.loads(frame_data)
 
             # Display
-            cv2.imshow('frame', frame)
-            cv2.waitKey(1)
+            # cv2.imshow('frame', frame)
+            # cv2.waitKey(1)
+            return frame
         except socket.error as msg:
             print(str(msg))
 
     def receiveHumidityAndTemperature(self):
         try:
-            msg = self.client.recv(1024).decode('utf8')
-            msg = msg.split(':')
-            humidity = msg[0]
-            temperature = msg[1]
-            return [humidity, temperature]
+            # receive data
+            list = []
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.client.recv(16)
+                if new_msg:
+                    # print("new msg len:", msg[:HEADERSIZE])
+                    msglen = int(msg[:HEADERSIZE])
+                    new_msg = False
+
+                # print(f"full message length: {msglen}")
+
+                full_msg += msg
+                # print(full_msg)
+                #
+                # print(len(full_msg))
+
+                if len(full_msg) - HEADERSIZE == msglen:
+                    # print("full msg recvd")
+                    # print(full_msg[HEADERSIZE:])
+                    list = pickle.loads(full_msg[HEADERSIZE:])
+                    # print(list)
+                    break
+
+            return list
         except socket.error as error:
             print(str(error))
 
+    def receivePageList(self):
+        try:
+            # send pageable
+            data = pickle.dumps(self.pageable)
+            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
+            # print(msg)
+            self.client.sendall(data)
+
+            # receive data
+            list = []
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.client.recv(16)
+                if new_msg:
+                    # print("new msg len:", msg[:HEADERSIZE])
+                    msglen = int(msg[:HEADERSIZE])
+                    new_msg = False
+
+                # print(f"full message length: {msglen}")
+
+                full_msg += msg
+                # print(full_msg)
+                #
+                # print(len(full_msg))
+
+                if len(full_msg) - HEADERSIZE == msglen:
+                    # print("full msg recvd")
+                    print(full_msg[HEADERSIZE:])
+                    list = pickle.loads(full_msg[HEADERSIZE:])
+                    # print(list)
+                    break
+
+            return list
+        except socket.error as msg:
+            print(str(msg))
+
+    def receivePageHistory(self):
+        try:
+            # send pageable
+            data = pickle.dumps(self.pageable)
+            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
+            # print(msg)
+            self.client.sendall(data)
+
+            # receive data
+            list = []
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.client.recv(16)
+                if new_msg:
+                    # print("new msg len:", msg[:HEADERSIZE])
+                    msglen = int(msg[:HEADERSIZE])
+                    new_msg = False
+
+                # print(f"full message length: {msglen}")
+
+                full_msg += msg
+                # print(full_msg)
+                #
+                # print(len(full_msg))
+
+                if len(full_msg) - HEADERSIZE == msglen:
+                    # print("full msg recvd")
+                    print(full_msg[HEADERSIZE:])
+                    list = pickle.loads(full_msg[HEADERSIZE:])
+                    print(list)
+                    break
+
+            return list
+        except socket.error as msg:
+            print(str(msg))
+
     def start(self):
-        self.client.sendall("START".encode('utf8'))
-        self.client.recv(1024)
         t = threading.Thread(target=self.run, args=())
         t.setDaemon = True
         t.start()
@@ -74,14 +170,24 @@ class Receiver:
         while True:
             try:
                 self.client.sendall(str(self.cm).encode('utf8'))
-                print("send command: ", self.cm)
+                # print("send command: ", self.cm)
                 # self.client.recv(1024)
                 if self.cm == Commands.LOG_FACE_DETECTOR.value:
                     self.receiverLogFaceName()
-                elif self.cm == Commands.IMAGE.value:
-                    self.receiverImage()
+                elif self.cm == Commands.FRAME_AND_HT.value:
+                    self.gui.frame = self.receiverImage()
                     self.client.sendall('OK'.encode('utf8'))
-                    print(self.receiveHumidityAndTemperature())
+                    HumTem = self.receiveHumidityAndTemperature()
+                    self.gui.setTemp(HumTem[1], HumTem[0])
+                elif self.cm == Commands.LIST.value:
+                    self.gui.List_f.tmp = self.receivePageList()
+                    return
+                elif self.cm == Commands.HISTORY.value:
+                    self.gui.History_f.tmp = self.receivePageHistory()
+                    return
+                elif self.cm == Commands.DIAGRAM.value:
+                    HumTem = self.receiveHumidityAndTemperature()
+                    self.gui.setTemp(HumTem[1], HumTem[0])
             except socket.error as msg:
                 print(str(msg))
                 print("Receiver error")

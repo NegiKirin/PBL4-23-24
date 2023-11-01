@@ -6,7 +6,9 @@ from Commands import Commands
 import pickle
 import struct
 import numpy as np
-
+import dao
+from Pageable import PageRequest
+HEADERSIZE = 10
 class Client:
     def __init__(self, conn, detector):
         # attribute of client
@@ -35,6 +37,8 @@ class CommandsSender:
         self.t = Thread(target=self.run, args=())
         self.t.setDaemon = True
         self.t.start()
+
+        self.pageable = None
 
     def sendLogFaceDetector(self):
         print("function sendlogfacedetector")
@@ -68,16 +72,94 @@ class CommandsSender:
 
     def sendHumidityAndTemperature(self):
         try:
-            humidity = 2
-            temperature = 10
-            msg = str(humidity) + ":" + str(temperature)
-            self.client.socket.sendall(msg.encode('utf8'))
+            humidity = np.random.randint(10, 50, size=1)[-1]
+            temperature = np.random.randint(10, 50, size=1)[-1]
+
+            data = pickle.dumps([humidity, temperature])
+            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
+            self.client.socket.sendall(data)
+
+            # msg = str(humidity) + ":" + str(temperature)
+            # self.client.socket.sendall(msg.encode('utf8'))
         except socket.error as error:
             print(str(error))
 
-    def wait(self):
-        self.client.socket.recv(1024)
-        self.client.socket.sendall("OK".encode('utf8'))
+    def sendPageList(self):
+        try:
+            # receive pageable
+            pageable = None
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.client.socket.recv(16)
+                if new_msg:
+                    # print("new msg len:", msg[:HEADERSIZE])
+                    msglen = int(msg[:HEADERSIZE])
+                    new_msg = False
+
+                # print(f"full message length: {msglen}")
+
+                full_msg += msg
+                # print(full_msg)
+                #
+                # print(len(full_msg))
+
+                if len(full_msg) - HEADERSIZE == msglen:
+                    # print("full msg recvd")
+                    # print(full_msg[HEADERSIZE:])
+                    pageable = pickle.loads(full_msg[HEADERSIZE:])
+                    # print(pageable)
+                    break
+
+            # select data
+            # print(pageable.page)
+            list = dao.UserDAO().findPageable(pageable=pageable)
+            # send data
+            data = pickle.dumps(list)
+            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
+            self.client.socket.sendall(data)
+
+        except socket.error as msg:
+            print(str(msg))
+
+    def sendPageHistory(self):
+        try:
+            # receive pageable
+            pageable = None
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.client.socket.recv(16)
+                if new_msg:
+                    # print("new msg len:", msg[:HEADERSIZE])
+                    msglen = int(msg[:HEADERSIZE])
+                    new_msg = False
+
+                # print(f"full message length: {msglen}")
+
+                full_msg += msg
+                # print(full_msg)
+                #
+                # print(len(full_msg))
+
+                if len(full_msg) - HEADERSIZE == msglen:
+                    # print("full msg recvd")
+                    # print(full_msg[HEADERSIZE:])
+                    pageable = pickle.loads(full_msg[HEADERSIZE:])
+                    # print(pageable)
+                    break
+
+            # select data
+            print(pageable.page)
+            list = dao.HistoryDAO().findPageable(pageable=pageable)
+            # send data
+            data = pickle.dumps(list)
+            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
+            print(data)
+            self.client.socket.sendall(data)
+
+        except socket.error as msg:
+            print(str(msg))
 
     def run(self):
         while True:
@@ -90,9 +172,15 @@ class CommandsSender:
                 # self.cm = self.client.socket.recv(1024).decode('utf8')
                 if cm == Commands.LOG_FACE_DETECTOR.value:
                     self.sendLogFaceDetector()
-                elif cm == Commands.IMAGE.value:
+                elif cm == Commands.FRAME_AND_HT.value:
                     self.sendImage()
                     self.client.socket.recv(1024)
+                    self.sendHumidityAndTemperature()
+                elif cm == Commands.LIST.value:
+                    self.sendPageList()
+                elif cm == Commands.HISTORY.value:
+                    self.sendPageHistory()
+                elif cm == Commands.DIAGRAM.value:
                     self.sendHumidityAndTemperature()
             except socket.error as error:
                 print(str(error))

@@ -4,6 +4,7 @@ import time
 import HandlerClient
 import Client
 from Module import FaceDetector
+import dao
 
 class server:
 
@@ -18,6 +19,8 @@ class server:
         t = threading.Thread(target=self.accept_socket, args=())
         t.setDaemon = True
         t.start()
+
+        # detector
         self.handlerClient = HandlerClient.handlerClient()
         self.detector = FaceDetector.face_detector(cam=1)
         self.detector.load_data()
