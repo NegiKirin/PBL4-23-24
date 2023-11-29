@@ -1,7 +1,7 @@
 import mysql.connector
 from Pageable import PageRequest
 class ConnectDB:
-    def __init__(self, host='localhost', user='root', password='', database='pbl4'):
+    def __init__(self, host='localhost', user='root', password='', database='pbl4_updated'):
         self.host = host
         self.user = user
         self.password = password
@@ -24,11 +24,11 @@ class UserDAO:
     def __init__(self):
         self.connect = ConnectDB()
 
-    # def findAll(self):
-    #     sql = 'SELECT * FROM user'
-    #     self.connect.myCursor.execute(sql)
-    #     result = self.connect.myCursor.fetchall()
-    #     return result
+    def findById(self, id):
+        sql = f"SELECT * FROM USER WHERE id = {id}"
+        self.connect.myCursor.execute(sql)
+        result = self.connect.myCursor.fetchall()
+        return result
 
     def findAll(self):
         sql = """SELECT user.id, name, class_name, faculty_name FROM user
@@ -69,6 +69,12 @@ class HistoryDAO:
     def __init__(self):
         self.connect = ConnectDB()
 
+    def insert(self, user_id, session_id):
+        sql = "INSERT INTO history (user_id, session_id) VALUES (%s, %s)"
+        val = (user_id, session_id)
+        self.connect.myCursor.execute(sql, val)
+        self.connect.mydb.commit()
+
 
     def findPageable(self, pageable):
         try:
@@ -100,7 +106,6 @@ class HistoryDAO:
 
         return tmp
 
-
     def totalItem(self):
         try:
             sql = "SELECT COUNT(*) FROM history"
@@ -112,9 +117,12 @@ class HistoryDAO:
 
 if __name__ == "__main__":
 
+    # dao = UserDAO()
+    # dao2 = HistoryDAO()
+    #
+    # pageable = PageRequest(page=1, maxPageItem=10)
+    #
+    # print(dao2.findPageable(pageable)[:-1])
     dao = UserDAO()
-    dao2 = HistoryDAO()
+    print(dao.findById(2))
 
-    pageable = PageRequest(page=1, maxPageItem=10)
-
-    print(dao2.findPageable(pageable)[:-1])

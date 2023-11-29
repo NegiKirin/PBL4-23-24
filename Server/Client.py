@@ -1,21 +1,27 @@
-from threading import Thread, Event
-import time
+import base64
 import datetime
-import socket
-from Commands import Commands
 import pickle
-import struct
-import numpy as np
+import socket
+import threading
+import time
+from threading import Thread
+
+import cv2
+import imutils
+
 import dao
-from Pageable import PageRequest
+from Commands import Commands
+
 HEADERSIZE = 10
 class Client:
-    def __init__(self, conn, detector):
+    def __init__(self, conn, UDP, detector, arduino):
         # attribute of client
-        self.socket = conn
+        self.socket = conn[0]
+        self.addr_TCP = conn[1]
+        self.socket_UDP = UDP
         self.detector = detector
         self.active = True
-
+        self.arduino = arduino
         # run
         # self.t = Thread(target=self.run, args=())
         # self.t.setDaemon = True
@@ -23,22 +29,50 @@ class Client:
         self.run()
 
     def run(self):
-        CommandsSender(self, self.detector)
+        CommandsSender(self, self.detector, self.arduino)
 
     def close_socket(self):
         self.socket.close()
 
 
 class CommandsSender:
-    def __init__(self, client, detector):
+    def __init__(self, client, detector, arduino):
         self.client = client
+        self.socket = client.socket
+        self.socket_UDP = client.socket_UDP
+        self.socket_UDP.settimeout(0.2)
         self.detector = detector
+        self.arduino = arduino
+
+        self.addr_UDP = (self.client.addr_TCP[0], self.getAddrUDP()[1])
+        print(self.addr_UDP)
         # run
         self.t = Thread(target=self.run, args=())
         self.t.setDaemon = True
         self.t.start()
 
         self.pageable = None
+
+    def getAddrUDP(self):
+        try:
+            # receive data
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.socket.recv(16)
+                if new_msg:
+                    msg_len = int(msg[:HEADERSIZE])
+                    new_msg = False
+
+                full_msg += msg
+
+                if len(full_msg) - HEADERSIZE == msg_len:
+                    list = pickle.loads(full_msg[HEADERSIZE:])
+                    break
+            return list
+        except socket.error as msg:
+            print(str(msg))
+            self.client.active = False
 
     def sendLogFaceDetector(self):
         print("function sendlogfacedetector")
@@ -48,8 +82,8 @@ class CommandsSender:
         for name in self.detector.face_names:
             msg = msg + name
         try:
-            self.client.socket.sendall(msg.encode("utf8"))
-            self.client.socket.recv(1024)
+            self.socket.sendall(msg.encode("utf8"))
+            self.socket.recv(1024)
         except socket.error as error:
             self.client.active = False
             print("Client disconnect")
@@ -58,31 +92,40 @@ class CommandsSender:
 
     def sendImage(self):
         try:
-            # Serialize frame
-            data = pickle.dumps(self.detector.img)
+            frame = imutils.resize(self.detector.img, width=400)
+            encoded, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 20])
+            data = base64.b64encode(buffer)
+            data = bytes(f"{1:<{HEADERSIZE}}", 'utf-8') + data
+            self.socket_UDP.sendto(data, self.addr_UDP)
 
-            # Send message length first
-            message_size = struct.pack("L", len(data))  ### CHANGED
 
-            # Then data
-            self.client.socket.sendall(message_size + data)
         except:
             print("client disconnect")
 
 
     def sendHumidityAndTemperature(self):
         try:
-            humidity = np.random.randint(10, 50, size=1)[-1]
-            temperature = np.random.randint(10, 50, size=1)[-1]
+            # humidity = self.arduino.readline().decode()
+            # temperature = self.arduino.readline().decode()
+            # if humidity != "" and temperature != "":
+            #     humidity = float(humidity)
+            #     temperature = float(temperature)
+            # else:
+            #     humidity = 0
+            #     temperature = 0
+
+            humidity = 0
+            temperature = 0
 
             data = pickle.dumps([humidity, temperature])
-            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
-            self.client.socket.sendall(data)
+            data = bytes(f"{2:<{HEADERSIZE}}", 'utf-8') + data
+            self.socket_UDP.sendto(data, self.addr_UDP)
 
-            # msg = str(humidity) + ":" + str(temperature)
-            # self.client.socket.sendall(msg.encode('utf8'))
         except socket.error as error:
             print(str(error))
+            print('error function ht')
+        except Exception as e:
+            print(str(e))
 
     def sendPageList(self):
         try:
@@ -91,7 +134,7 @@ class CommandsSender:
             full_msg = b''
             new_msg = True
             while True:
-                msg = self.client.socket.recv(16)
+                msg = self.socket.recv(16)
                 if new_msg:
                     # print("new msg len:", msg[:HEADERSIZE])
                     msglen = int(msg[:HEADERSIZE])
@@ -117,7 +160,7 @@ class CommandsSender:
             # send data
             data = pickle.dumps(list)
             data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
-            self.client.socket.sendall(data)
+            self.socket.sendall(data)
 
         except socket.error as msg:
             print(str(msg))
@@ -129,7 +172,7 @@ class CommandsSender:
             full_msg = b''
             new_msg = True
             while True:
-                msg = self.client.socket.recv(16)
+                msg = self.socket.recv(16)
                 if new_msg:
                     # print("new msg len:", msg[:HEADERSIZE])
                     msglen = int(msg[:HEADERSIZE])
@@ -156,16 +199,27 @@ class CommandsSender:
             data = pickle.dumps(list)
             data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
             print(data)
-            self.client.socket.sendall(data)
+            self.socket.sendall(data)
 
         except socket.error as msg:
             print(str(msg))
 
+    def sendHTAndImage(self):
+        while self.isContinue:
+            self.sendImage()
+            self.sendHumidityAndTemperature()
+            # print('send')
+
     def run(self):
+        old_cm = None
+        thread = None
         while True:
-            print("Waiting command")
+            # print("Waiting command")
             try:
-                cm = self.client.socket.recv(1024)
+                if old_cm == Commands.FRAME_AND_HT.value:
+                    self.isContinue = False
+                cm = self.socket.recv(1024)
+                old_cm = cm
                 # self.client.socket.sendall(cm)
                 cm = int(cm.decode('utf8'))
                 print("New command", cm)
@@ -173,9 +227,12 @@ class CommandsSender:
                 if cm == Commands.LOG_FACE_DETECTOR.value:
                     self.sendLogFaceDetector()
                 elif cm == Commands.FRAME_AND_HT.value:
-                    self.sendImage()
-                    self.client.socket.recv(1024)
-                    self.sendHumidityAndTemperature()
+                    self.isContinue = True
+                    # thread = threading.Thread(target=self.sendHTAndImage, args=()).start()
+                    self.sendHTAndImage()
+                    # self.sendImage()
+                    # self.socket.recv(1024)
+                    # self.sendHumidityAndTemperature()
                 elif cm == Commands.LIST.value:
                     self.sendPageList()
                 elif cm == Commands.HISTORY.value:
@@ -186,3 +243,5 @@ class CommandsSender:
                 print(str(error))
                 self.client.active = False
                 break
+            except Exception as e:
+                print(str(e))

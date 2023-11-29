@@ -17,6 +17,9 @@ class face_detector:
         self.cap = None
         self.camera = cam
         self.save_path_folder = None
+
+        self.pTime = 0
+        self.cTime = 0
         
     def load_data(self):
         # Change direct path: './database'
@@ -36,7 +39,7 @@ class face_detector:
                 # Add to known_names
                 self.known_names.append(folder)
     
-    def face_detection(self):
+    def face_detection(self, gui):
         self.cap = cv2.VideoCapture(self.camera)
         while True:
             ret, frame = self.cap.read()
@@ -88,11 +91,15 @@ class face_detector:
                         cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
                         
                 # Show fps in screen
-                fps = self.cap.get(cv2.CAP_PROP_FPS)
-                cv2.putText(frame, f"FPS: {str(fps)}", (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+                self.cTime = time.time()
+                fps = 1 / (self.cTime - self.pTime)
+                self.pTime = self.cTime
+
+                cv2.putText(frame, f"FPS: {str(int(fps))}", (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
                 # Show frame on screen
                 cv2.imshow("Face Recognition", frame)
+                gui.show_webcam(frame)
                 self.img = frame
                 if cv2.waitKey(2) == ord('q'):
                     break

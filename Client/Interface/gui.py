@@ -12,7 +12,6 @@ matplotlib.use('QtAgg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
-print(current_directory)
 sys.path.append(current_directory)
 from Pageable import PageRequest
 # sys.path.append(current_directory+"..\\")
@@ -1009,7 +1008,7 @@ class Temperature_w(QMainWindow):
         self.X_humidity = [0]
         self.Y_humidity = [0]
         Xmin, Xmax, Ymin, Ymax = 0, 20, 0, 100
-        self.temperature.axes.axis([Xmin, Xmax, Ymin, Ymax])
+        self.temperature.axes.axis([Xmin, Xmax, Ymin, 40])
         self.humidity.axes.axis([Xmin, Xmax, Ymin, Ymax])
         # self.sc.axes.plot([0,1,2,3,4], [10,1,20,3,40])
 
@@ -1067,7 +1066,7 @@ class Temperature_w(QMainWindow):
             self.Y_temperature.pop(0)
             self.Y_temperature.append(self.gui.t)
             self.temperature.axes.clear()
-            self.temperature.axes.axis([self.X_temperature[0], self.X_temperature[-1], 0, 100])
+            self.temperature.axes.axis([self.X_temperature[0], self.X_temperature[-1], 0, 40])
         self.temperature.axes.plot(self.X_temperature, self.Y_temperature, color='red')
         self.temperature.draw()
     def plotHumidity(self):
@@ -1165,8 +1164,10 @@ class GUI:
             q_image = QImage(self.frame.data, width, height, bytes_per_line, QImage.Format.Format_BGR888)
             pixmap = QPixmap.fromImage(q_image)
             self.imagine.setPixmap(pixmap)
-        except:
-            print("error")
+        except Exception as e:
+            pass
+            # print(e)
+            # print("error")
     #
     def setHistory(self):
         self.History_f.LoadingData()

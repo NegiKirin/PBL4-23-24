@@ -29,11 +29,13 @@ gui.draw()
 gui.setTemp(tt=20, pp= 56)
 gui.setMonitor()
 gui.setTimer_Monitor()
+
 t= threading.Thread(target=setTempThread, args=[], daemon=True)
 t.start()
 #lấy video và tiến hành đưa vào luồng để đọc và hiển thị video
 video = cv2.VideoCapture(0)
 gui.setTimer()
+
 t1 = threading.Thread(target=setFrameThread, args=(), daemon=True)
 t1.start()
 
