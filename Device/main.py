@@ -10,4 +10,4 @@ if __name__ == "__main__":
     main_win = main_gui.MainWindow()
     main_win.show()
     sys.exit(app.exec())
-    # Server.server()
+    # Device.server()
