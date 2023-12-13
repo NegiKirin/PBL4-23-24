@@ -1,5 +1,4 @@
 import threading
-
 import face_recognition
 import os
 import sys
@@ -31,30 +30,38 @@ class face_detector:
 
         self.dao = dao
 
+
     def load_data(self):
         # Change direct path: './database'
         os.chdir(self.data_root)
+        
         # Find all folder in database
         for folder in os.listdir():
             # Find all file in folder
             for file in os.listdir(folder):
                 # Image_path: './database/folder/image'
                 image_path = os.path.join(folder, file)
+                
                 # Load image
                 known_image = face_recognition.load_image_file(image_path)
+                
                 # Encoding image
                 know_encoding = face_recognition.face_encodings(known_image)[0]
+                
                 # Add to known_encodings
                 self.known_encodings.append(know_encoding)
+                
                 # Add to known_names
                 self.known_names.append(folder)
 
+# Bug 13/12 Pham Doan Minh Hieu
     def load_images(self, images, users, gui):
         # List to saving face location
         face_locations = []
 
         # List to saving face_encodings
         face_encodings = []
+        
         for image, user in zip(images, users):
             # Flip frame
             image = cv2.flip(image, 1)
@@ -66,19 +73,23 @@ class face_detector:
             rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
 
             # Define location of a face in camera => return list of tuple(top, right, bottom, left)
-            face_locations = face_recognition.face_locations(rgb_small_frame)
+            face_locations = face_recognition.face_locations(rgb_small_frame)[0]
 
             # Encoding current face frame in camera
-            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)[0]
+            
             # Add to known_encodings
             self.known_encodings.append(face_encodings)
+            
             # Add to known_names
             self.known_names.append(user.fullname)
+            
         thread = threading.Thread(target=self.face_detection, args=[gui])
         thread.setDaemon = True
         thread.start()
 
 
+# Bug 13/12 Pham Doan Minh Hieu
     def face_detection(self, gui):
         print('function face_detection')
         self.id = ""
@@ -136,23 +147,23 @@ class face_detector:
                 self.pTime = self.cTime
                 cv2.putText(frame, f"FPS: {str(int(fps))}", (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
-                if self.id != "":
-                    try:
-                        # print(self.dao.UserDAO().findById(int(self.id)))
-                        # self.dao.HistoryDAO().insert(int(self.id), 1)
-                        infor = self.dao.UserDAO().findById(int(self.id))
-                        print(infor)
-                        path = self.data_root + '/' + str(infor[0][0])
-                        image_path = os.path.join(path, os.listdir(path)[0])
-                        img = cv2.imread(image_path)
-                        gui.show_infor(infor[0], img)
+                # if self.id != "":
+                #     try:
+                #         # print(self.dao.UserDAO().findById(int(self.id)))
+                #         # self.dao.HistoryDAO().insert(int(self.id), 1)
+                #         infor = self.dao.UserDAO().findById(int(self.id))
+                #         print(infor)
+                #         path = self.data_root + '/' + str(infor[0][0])
+                #         image_path = os.path.join(path, os.listdir(path)[0])
+                #         img = cv2.imread(image_path)
+                #         gui.show_infor(infor[0], img)
 
-                    except Exception:
-                        pass
+                #     except Exception:
+                #         pass
 
-                    print('have a face')
-                else:
-                    print("Unknow")
+                #     print('have a face')
+                # else:
+                #     print("Unknow")
                 # Show frame on screen
                 # cv2.imshow("Face Recognition", frame)
                 gui.show_webcam(frame)
