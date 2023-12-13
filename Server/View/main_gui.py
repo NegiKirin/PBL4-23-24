@@ -167,8 +167,10 @@ class MainWindow(QMainWindow):
             self.uic.label_error_email.setMaximumSize(QtCore.QSize(16777215, 16777215))
             self.uic.label_error_email.setText("Nhập email")
         else:
+            # hide label_error_fullname
             self.uic.label_error_email.setMaximumSize(QtCore.QSize(0, 16777215))
             self.uic.label_error_email.setText('')
+
 
         # todo: add student
 

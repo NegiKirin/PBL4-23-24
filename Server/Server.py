@@ -8,7 +8,7 @@ class Server:
         self.soc = None
         self.soc_UDP = None
         self.face_names = []
-        self.host = "127.0.0.1"
+        self.host = "192.168.1.35"
         self.port = 9999
 
         self.create_socket()
