@@ -56,30 +56,29 @@ class face_detector:
 
 # Bug 13/12 Pham Doan Minh Hieu
     def load_images(self, images, users, gui):
-        # List to saving face location
-        face_locations = []
-
-        # List to saving face_encodings
-        face_encodings = []
         
         for image, user in zip(images, users):
-            # Flip frame
-            image = cv2.flip(image, 1)
+            # # Flip frame
+            # image = cv2.flip(image, 1)
 
-            # Resize frame to easy processing
-            small_frame = cv2.resize(image, (0, 0), fx=0.3, fy=0.3).astype(np.uint8)
+            # # Resize frame to easy processing
+            # small_frame = cv2.resize(image, (0, 0), fx=0.3, fy=0.3).astype(np.uint8)
 
-            # Convert BGR_frame to RGB_frame
-            rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+            # # Convert BGR_frame to RGB_frame
+            # rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
 
-            # Define location of a face in camera => return list of tuple(top, right, bottom, left)
-            face_locations = face_recognition.face_locations(rgb_small_frame)[0]
+            # # Define location of a face in camera => return list of tuple(top, right, bottom, left)
+            # face_location = face_recognition.face_locations(rgb_small_frame)[0]
 
-            # Encoding current face frame in camera
-            face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)[0]
+            # # Encoding current face frame in camera
+            # face_encoding = face_recognition.face_encodings(rgb_small_frame, face_location)[0]
+            
+                
+            # Encoding image
+            know_encoding = face_recognition.face_encodings(image)[0]
             
             # Add to known_encodings
-            self.known_encodings.append(face_encodings)
+            self.known_encodings.append(know_encoding)
             
             # Add to known_names
             self.known_names.append(user.fullname)
