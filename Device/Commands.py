@@ -6,3 +6,5 @@ class Commands(Enum):
     HISTORY = -3
     LIST = -4
     DIAGRAM = -5
+    SEND_IMAGES_FOR_DEVICE = -6
+    SEND_ROOM_NUMBER = -7

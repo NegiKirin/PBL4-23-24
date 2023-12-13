@@ -4,38 +4,46 @@ import threading
 import time
 
 import cv2
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtCore import QThread, pyqtSignal, Qt
+from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QSize
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem
 import numpy as np
+
+
 current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
 sys.path.append(current_directory)
-from new_gui import Ui_MainWindow
+from update_gui import Ui_MainWindow
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, detector=None):
+    def __init__(self, detector=None, sender=None):
         super().__init__()
         self.uic = Ui_MainWindow()
         self.uic.setupUi(self)
         self.detector = detector
-
+        self.send = sender
         self.max_normal_window = 0
+        self.results = []
 
         # hide window hint
         self.setWindowFlag(Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
         # infor bar hide
         self.hide_infor()
 
-        # --- event button
+        # --- event  button
         # close window button
         self.uic.btn_close.clicked.connect(self.closeEvent)
         # restore window button
         self.uic.btn_window_restore.clicked.connect(self.Window_restore)
         # minus window
         self.uic.btn_minus.clicked.connect(lambda: self.showMinimized())
+        # config room number
+        self.uic.btn_config_room_number.clicked.connect(self.config_room_number)
+        # select item in list widget
+        self.uic.listWidget.itemDoubleClicked.connect(self.select_items)
 
         self.thread = {}
 
@@ -122,6 +130,139 @@ class MainWindow(QMainWindow):
         if self.startPos.x() <= width and self.startPos.y() <= height \
             and self.isFullScreen() == False:
             self.move(self.pos() + (event.pos() - self.startPos))
+
+    def config_room_number(self):
+        room_number = self.uic.room_number.text()
+        print(room_number)
+        self.results = self.send.sendRoomNumber(room_number)
+        if self.results == []:
+            return
+        if self.results != []:
+            # set row in list widget
+            self.addItemForSession(self.results)
+
+            self.uic.stackedWidget.setCurrentWidget(self.uic.page_2)
+
+    def addItemForSession(self, sessions):
+        i = 0
+        print(sessions)
+        # add row
+        for session in sessions:
+            newItem = QListWidgetItem()
+            newItem.setSizeHint(QSize(0, 35))
+
+            centralwidget = QtWidgets.QWidget()
+            centralwidget.setStyleSheet("")
+            centralwidget.setObjectName("centralwidget")
+            verticalLayout = QtWidgets.QVBoxLayout(centralwidget)
+            verticalLayout.setContentsMargins(0, 0, 0, 0)
+            verticalLayout.setSpacing(0)
+            verticalLayout.setObjectName("verticalLayout")
+            row = QtWidgets.QFrame(centralwidget)
+            font = QtGui.QFont()
+            font.setPointSize(6)
+            row.setFont(font)
+            row.setStyleSheet("QWidget:hover{\n"
+                                   "    background-color: rgb(130, 195, 195);\n"
+                                   "}")
+            row.setFrameShape(QtWidgets.QFrame.StyledPanel)
+            row.setFrameShadow(QtWidgets.QFrame.Raised)
+            row.setObjectName("row")
+            horizontalLayout_2 = QtWidgets.QHBoxLayout(row)
+            horizontalLayout_2.setContentsMargins(0, 5, 0, 5)
+            horizontalLayout_2.setSpacing(0)
+            horizontalLayout_2.setObjectName("horizontalLayout_2")
+            index = QtWidgets.QLabel(row)
+            font = QtGui.QFont()
+            font.setPointSize(10)
+            index.setFont(font)
+            index.setAlignment(QtCore.Qt.AlignCenter)
+            index.setObjectName("index")
+            horizontalLayout_2.addWidget(index)
+            i+=1
+            index.setText(str(i))
+            line_2 = QtWidgets.QFrame(row)
+            line_2.setStyleSheet("background-color: rgb(74, 114, 118);")
+            line_2.setFrameShape(QtWidgets.QFrame.VLine)
+            line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+            line_2.setObjectName("line_2")
+            horizontalLayout_2.addWidget(line_2)
+            room_number = QtWidgets.QLabel(row)
+            font = QtGui.QFont()
+            font.setPointSize(10)
+            room_number.setFont(font)
+            room_number.setAlignment(QtCore.Qt.AlignCenter)
+            room_number.setObjectName("room_number")
+            horizontalLayout_2.addWidget(room_number)
+            room_number.setText(session.room.roomNumber)
+            line_3 = QtWidgets.QFrame(row)
+            line_3.setStyleSheet("background-color: rgb(74, 114, 118);")
+            line_3.setFrameShape(QtWidgets.QFrame.VLine)
+            line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+            line_3.setObjectName("line_3")
+            horizontalLayout_2.addWidget(line_3)
+            day = QtWidgets.QLabel(row)
+            font = QtGui.QFont()
+            font.setPointSize(10)
+            day.setFont(font)
+            day.setAlignment(QtCore.Qt.AlignCenter)
+            day.setObjectName("day")
+            horizontalLayout_2.addWidget(day)
+            d = str(session.day).split('-')
+            d.reverse()
+            d = '-'.join(d)
+            day.setText(d)
+            line_4 = QtWidgets.QFrame(row)
+            line_4.setStyleSheet("background-color: rgb(74, 114, 118);")
+            line_4.setFrameShape(QtWidgets.QFrame.VLine)
+            line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+            line_4.setObjectName("line_4")
+            horizontalLayout_2.addWidget(line_4)
+            start_time = QtWidgets.QLabel(row)
+            font = QtGui.QFont()
+            font.setPointSize(10)
+            start_time.setFont(font)
+            start_time.setAlignment(QtCore.Qt.AlignCenter)
+            start_time.setObjectName("start_time")
+            horizontalLayout_2.addWidget(start_time)
+            start_time.setText(str(session.startTime))
+            line_5 = QtWidgets.QFrame(row)
+            line_5.setStyleSheet("background-color: rgb(74, 114, 118);")
+            line_5.setFrameShape(QtWidgets.QFrame.VLine)
+            line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
+            line_5.setObjectName("line_5")
+            horizontalLayout_2.addWidget(line_5)
+            end_time = QtWidgets.QLabel(row)
+            font = QtGui.QFont()
+            font.setPointSize(10)
+            end_time.setFont(font)
+            end_time.setAlignment(QtCore.Qt.AlignCenter)
+            end_time.setObjectName("end_time")
+            horizontalLayout_2.addWidget(end_time)
+            end_time.setText(str(session.endTime))
+            verticalLayout.addWidget(row)
+
+            self.uic.listWidget.addItem(newItem)
+            self.uic.listWidget.setItemWidget(newItem, centralwidget)
+
+    def select_items(self, item):
+        row = self.uic.listWidget.row(item)
+        # send session id return image data
+        t = threading.Thread(target=self.send.sendIdSession, args=[self.results[row].id, self])
+        t.setDaemon = True
+        t.start()
+
+        self.uic.stackedWidget.setCurrentWidget(self.uic.page_4)
+        # self.send.sendIdSession(self.results[row].id)
+
+    def progress(self, percen):
+        self.uic.progressBar.setValue(percen)
+        if percen == 100:
+            self.uic.stackedWidget.setCurrentWidget(self.uic.page)
+            # self.detector.
+
+    def startDetector(self, images, users):
+        self.detector.load_images(images, users, self)
 
 class capture_video(QThread):
     signal = pyqtSignal(np.ndarray)
