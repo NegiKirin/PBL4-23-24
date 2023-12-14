@@ -1,9 +1,7 @@
 import socket
 import sys
 import threading
-
 from PyQt5.QtWidgets import QApplication
-
 from New_Interface.main_gui import MainWindow
 from Receiver import Receiver
 import checkin
@@ -13,7 +11,7 @@ from Sender import Sender
 class Device:
     def __init__(self):
         self.soc = None
-        self.host = "127.0.0.1"
+        self.host = "192.168.1.17"
         self.port = 9999
 
         self.create_socket()

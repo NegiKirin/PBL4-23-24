@@ -16,7 +16,7 @@ class face_detector:
         self.known_encodings = []
         self.known_names = []
 
-        self.id = ""
+        self.name_checked = ""
 
         self.width = 1280
         self.height = 720
@@ -29,6 +29,8 @@ class face_detector:
         self.cTime = 0
 
         self.dao = dao
+        
+        self.images = []
 
 
     def load_data(self):
@@ -56,24 +58,8 @@ class face_detector:
 
 # Bug 13/12 Pham Doan Minh Hieu
     def load_images(self, images, users, gui):
-        
+        self.images = images
         for image, user in zip(images, users):
-            # # Flip frame
-            # image = cv2.flip(image, 1)
-
-            # # Resize frame to easy processing
-            # small_frame = cv2.resize(image, (0, 0), fx=0.3, fy=0.3).astype(np.uint8)
-
-            # # Convert BGR_frame to RGB_frame
-            # rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
-
-            # # Define location of a face in camera => return list of tuple(top, right, bottom, left)
-            # face_location = face_recognition.face_locations(rgb_small_frame)[0]
-
-            # # Encoding current face frame in camera
-            # face_encoding = face_recognition.face_encodings(rgb_small_frame, face_location)[0]
-            
-                
             # Encoding image
             know_encoding = face_recognition.face_encodings(image)[0]
             
@@ -91,9 +77,9 @@ class face_detector:
 # Bug 13/12 Pham Doan Minh Hieu
     def face_detection(self, gui):
         print('function face_detection')
-        self.id = ""
+        self.name_checked = ""
         self.cap = cv2.VideoCapture(self.camera)
-        while True:
+        while self.name_checked == "":
             ret, frame = self.cap.read()
             if ret == True:
                 # Flip frame
@@ -133,7 +119,8 @@ class face_detector:
                     best_match_index = np.argmin(face_distances)
 
                     if matches[best_match_index] == True and face_distances[best_match_index] <= 0.4:
-                        self.id = self.known_names[best_match_index]
+                        
+                        self.name_checked = self.known_names[best_match_index]
 
                         top, right, bottom, left = face_location
 
@@ -146,23 +133,18 @@ class face_detector:
                 self.pTime = self.cTime
                 cv2.putText(frame, f"FPS: {str(int(fps))}", (50, 75), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
 
-                # if self.id != "":
-                #     try:
-                #         # print(self.dao.UserDAO().findById(int(self.id)))
-                #         # self.dao.HistoryDAO().insert(int(self.id), 1)
-                #         # infor = self.dao.UserDAO().findById(int(self.id))
-                #         # print(infor)
-                #         path = self.data_root + '/' + str(infor[0][0])
-                #         image_path = os.path.join(path, os.listdir(path)[0])
-                #         img = cv2.imread(image_path)
-                #         gui.show_infor(infor[0], img)
-                #
-                #     except Exception:
-                #         pass
-                #
-                #     print('have a face')
-                # else:
-                #     print("Unknow")
+    
+                # ==== show image in GUI ====
+                if self.name_checked != "":
+                    try:
+                        gui.show_infor(self.name_checked, self.images[best_match_index])
+                    except Exception as e:
+                        print(str(e), end="\n")
+                
+                
+                    print('have a face')
+                else:
+                    print("Unknow")
                 # Show frame on screen
                 # cv2.imshow("Face Recognition", frame)
                 gui.show_webcam(frame)
