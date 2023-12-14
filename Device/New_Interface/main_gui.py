@@ -61,33 +61,38 @@ class MainWindow(QMainWindow):
         self.uic.frame_infor.setMaximumSize(QtCore.QSize(0, 16777215))
         self.uic.frame_infor.setMinimumSize(QtCore.QSize(0, 0))
 
-    def show_infor(self, infor, image):
+    def show_infor(self, fullname, image):
         self.uic.frame_infor.setMaximumSize(QtCore.QSize(300, 16777215))
         self.uic.frame_infor.setMinimumSize(QtCore.QSize(250, 0))
-        self.uic.label_name.setText(str(infor[5]))
+        self.uic.label_name.setText(fullname)
         qt_img = self.convert_cv_qt(image, 140, 140)
         self.uic.label_avatar.setPixmap(qt_img)
         # set action for btns
-        self.infor = infor
+        self.fullname = fullname
         self.uic.btn_confirm.clicked.connect(self.confirm_infor)
         self.uic.btn_cancel.clicked.connect(self.cancel_infor)
 
     def confirm_infor(self):
-        cccd = self.uic.input_cccd.text()
-        if cccd == self.infor[1]:
-            print('OK')
-            self.detector.dao.HistoryDAO().insert(int(self.infor[0]), 1)
-            t = threading.Thread(target=self.detector.face_detection, args=[self])
-            t.setDaemon = True
-            t.start()
-            self.uic.input_cccd.setText('')
-            self.hide_infor()
-        else:
-            t = threading.Thread(target=self.detector.face_detection, args=[self])
-            t.setDaemon = True
-            t.start()
-            self.uic.input_cccd.setText('')
-            self.hide_infor()
+        # cccd = self.uic.input_cccd.text()
+        # if cccd == self.infor[1]:
+        #     print('OK')
+        #     self.detector.dao.HistoryDAO().insert(int(self.infor[0]), 1)
+        #     t = threading.Thread(target=self.detector.face_detection, args=[self])
+        #     t.setDaemon = True
+        #     t.start()
+        #     self.uic.input_cccd.setText('')
+        #     self.hide_infor()
+        # else:
+        #     t = threading.Thread(target=self.detector.face_detection, args=[self])
+        #     t.setDaemon = True
+        #     t.start()
+        #     self.uic.input_cccd.setText('')
+        #     self.hide_infor()
+        t = threading.Thread(target=self.detector.face_detection, args=[self])
+        t.setDaemon = True
+        t.start()
+        self.uic.input_cccd.setText('')
+        self.hide_infor()
 
     def cancel_infor(self):
         t = threading.Thread(target=self.detector.face_detection, args=[self])

@@ -93,7 +93,7 @@ class face_detector:
         print('function face_detection')
         self.id = ""
         self.cap = cv2.VideoCapture(self.camera)
-        while self.id == "":
+        while True:
             ret, frame = self.cap.read()
             if ret == True:
                 # Flip frame
@@ -150,16 +150,16 @@ class face_detector:
                 #     try:
                 #         # print(self.dao.UserDAO().findById(int(self.id)))
                 #         # self.dao.HistoryDAO().insert(int(self.id), 1)
-                #         infor = self.dao.UserDAO().findById(int(self.id))
-                #         print(infor)
+                #         # infor = self.dao.UserDAO().findById(int(self.id))
+                #         # print(infor)
                 #         path = self.data_root + '/' + str(infor[0][0])
                 #         image_path = os.path.join(path, os.listdir(path)[0])
                 #         img = cv2.imread(image_path)
                 #         gui.show_infor(infor[0], img)
-
+                #
                 #     except Exception:
                 #         pass
-
+                #
                 #     print('have a face')
                 # else:
                 #     print("Unknow")
