@@ -11,10 +11,14 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QFileDia
 import numpy as np
 from unidecode import unidecode
 
+# from Server.Model.DAO.SessionDAO import SessionDAO
+
 
 current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
 sys.path.append(current_directory)
 from server_gui import Ui_MainWindow
+from Model.DAO.UserDAO import UserDAO
+from Model.DAO.SessionDAO import SessionDAO
 
 
 class MainWindow(QMainWindow):
@@ -122,6 +126,8 @@ class MainWindow(QMainWindow):
     def changePageSessionList(self):
         self.uic.stackedWidget.setCurrentWidget(self.uic.page_5)
         # todo: select sessions and add for session_list
+        sessions = SessionDAO().getAll()
+        print(sessions)
 
     def searchStudent(self):
         # get student name to search bar

@@ -16,7 +16,7 @@ class face_detector:
         self.known_encodings = []
         self.known_names = []
 
-        self.name_checked = ""
+        self.user_checked = ""
 
         self.width = 1280
         self.height = 720
@@ -59,6 +59,7 @@ class face_detector:
 # Bug 13/12 Pham Doan Minh Hieu
     def load_images(self, images, users, gui):
         self.images = images
+        self.users = users
         for image, user in zip(images, users):
             # Encoding image
             know_encoding = face_recognition.face_encodings(image)[0]
@@ -67,7 +68,7 @@ class face_detector:
             self.known_encodings.append(know_encoding)
             
             # Add to known_names
-            self.known_names.append(user.fullname)
+            self.known_names.append(user)
             
         thread = threading.Thread(target=self.face_detection, args=[gui])
         thread.setDaemon = True
@@ -77,9 +78,9 @@ class face_detector:
 # Bug 13/12 Pham Doan Minh Hieu
     def face_detection(self, gui):
         print('function face_detection')
-        self.name_checked = ""
+        self.user_checked = ""
         self.cap = cv2.VideoCapture(self.camera)
-        while self.name_checked == "":
+        while self.user_checked == "":
             ret, frame = self.cap.read()
             if ret == True:
                 # Flip frame
@@ -120,7 +121,7 @@ class face_detector:
 
                     if matches[best_match_index] == True and face_distances[best_match_index] <= 0.4:
                         
-                        self.name_checked = self.known_names[best_match_index]
+                        self.user_checked = self.known_names[best_match_index]
 
                         top, right, bottom, left = face_location
 
@@ -135,9 +136,9 @@ class face_detector:
 
     
                 # ==== show image in GUI ====
-                if self.name_checked != "":
+                if self.user_checked != "":
                     try:
-                        gui.show_infor(self.name_checked, self.images[best_match_index])
+                        gui.show_infor(self.user_checked, self.images[best_match_index])
                     except Exception as e:
                         print(str(e), end="\n")
                 

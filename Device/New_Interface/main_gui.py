@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self.detector = detector
         self.send = sender
         self.max_normal_window = 0
-        self.results = []
+        self.sessions = []
 
         # hide window hint
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -61,33 +61,35 @@ class MainWindow(QMainWindow):
         self.uic.frame_infor.setMaximumSize(QtCore.QSize(0, 16777215))
         self.uic.frame_infor.setMinimumSize(QtCore.QSize(0, 0))
 
-    def show_infor(self, fullname, image):
+    def show_infor(self, user, image):
         self.uic.frame_infor.setMaximumSize(QtCore.QSize(300, 16777215))
         self.uic.frame_infor.setMinimumSize(QtCore.QSize(250, 0))
-        self.uic.label_name.setText(fullname)
+        self.uic.label_name.setText(user.fullname)
         qt_img = self.convert_cv_qt(image, 140, 140)
         self.uic.label_avatar.setPixmap(qt_img)
         # set action for btns
-        self.fullname = fullname
+        self.user = user
         self.uic.btn_confirm.clicked.connect(self.confirm_infor)
         self.uic.btn_cancel.clicked.connect(self.cancel_infor)
 
     def confirm_infor(self):
-        # cccd = self.uic.input_cccd.text()
-        # if cccd == self.infor[1]:
-        #     print('OK')
-        #     self.detector.dao.HistoryDAO().insert(int(self.infor[0]), 1)
-        #     t = threading.Thread(target=self.detector.face_detection, args=[self])
-        #     t.setDaemon = True
-        #     t.start()
-        #     self.uic.input_cccd.setText('')
-        #     self.hide_infor()
-        # else:
-        #     t = threading.Thread(target=self.detector.face_detection, args=[self])
-        #     t.setDaemon = True
-        #     t.start()
-        #     self.uic.input_cccd.setText('')
-        #     self.hide_infor()
+        cccd = self.uic.input_cccd.text()
+        if cccd == self.user.cccd:
+            print('OK')
+            # todo: update for student
+            self.send.sendSessionIdAndUserId(self.sessions.id, self.user.id)
+
+            t = threading.Thread(target=self.detector.face_detection, args=[self])
+            t.setDaemon = True
+            t.start()
+            self.uic.input_cccd.setText('')
+            self.hide_infor()
+        else:
+            t = threading.Thread(target=self.detector.face_detection, args=[self])
+            t.setDaemon = True
+            t.start()
+            self.uic.input_cccd.setText('')
+            self.hide_infor()
         t = threading.Thread(target=self.detector.face_detection, args=[self])
         t.setDaemon = True
         t.start()
@@ -139,10 +141,11 @@ class MainWindow(QMainWindow):
     def config_room_number(self):
         room_number = self.uic.room_number.text()
         print(room_number)
-        self.results = self.send.sendRoomNumber(room_number)
-        if self.results == []:
+        # === ID SESSION ===
+        self.sessions = self.send.sendRoomNumber(room_number)
+        if self.sessions == []:
             return
-        if self.results != []:
+        if self.sessions != []:
             # set row in list widget
             self.addItemForSession(self.results)
 
@@ -253,7 +256,7 @@ class MainWindow(QMainWindow):
     def select_items(self, item):
         row = self.uic.listWidget.row(item)
         # send session id return image data
-        t = threading.Thread(target=self.send.sendIdSession, args=[self.results[row].id, self])
+        t = threading.Thread(target=self.send.sendIdSession, args=[self.sessions[row].id, self])
         t.setDaemon = True
         t.start()
 
