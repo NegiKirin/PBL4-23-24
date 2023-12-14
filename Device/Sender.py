@@ -61,7 +61,7 @@ class Sender:
                 msg = self.soc.recv(102400)
                 if new_msg:
                     msglen = int(msg[:HEADERSIZE])
-                    # print(msg)
+                    print(msglen)
                     new_msg = False
 
                 full_msg += msg
@@ -73,7 +73,14 @@ class Sender:
                     # print(list)
                     break
             self.soc.sendall('Done'.encode('utf8'))
-
+            
+            
+            
+            # ===== SHOW IMAGE ====
+            # for image in images:
+            #     cv2.imshow("Image", image)
+            #     cv2.waitKey(1000)  # waitKey(ms)
+            
             users = None
             full_msg = b''
             new_msg = True
@@ -93,9 +100,7 @@ class Sender:
                     # print(list)
                     break
 
-            # for image in list:
-            #     cv2.imshow("Image", image)
-            #     cv2.waitKey(1000)  # waitKey(ms)
+            
             gui.startDetector(images, users)
             return images, users
         except socket.error as e:
