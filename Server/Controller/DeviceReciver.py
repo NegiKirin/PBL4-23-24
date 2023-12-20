@@ -76,6 +76,28 @@ class DeviceReceiver:
         except socket.error as e:
             print(str(e))
 
+    def receiverSessionIdAndUserId(self):
+        try:
+            list = None
+            full_msg = b''
+            new_msg = True
+            while True:
+                msg = self.soc.recv(102400)
+                if new_msg:
+                    msglen = int(msg[:HEADERSIZE])
+                    # print(msg)
+                    new_msg = False
+
+                full_msg += msg
+                if len(full_msg) - HEADERSIZE == msglen:
+                    # print(full_msg[HEADERSIZE:])
+                    list = pickle.loads(full_msg[HEADERSIZE:])
+                    # print(list)
+                    break
+            UserDAO().updateStudentForSession(list[1], list[0])
+        except socket.error as e:
+            print(str(e))
+
     def run(self):
         while True:
             try:
@@ -87,7 +109,8 @@ class DeviceReceiver:
                     self.sendImage()
                 elif cm == Commands.SEND_ROOM_NUMBER.value:
                     self.sendSessionsOfRoom()
-
+                elif cm == Commands.SEND_SESSIONID_AND_USERID.value:
+                    self.receiverSessionIdAndUserId()
             except socket.error as error:
                 print(error)
                 self.active = False

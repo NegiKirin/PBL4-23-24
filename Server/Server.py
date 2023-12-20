@@ -1,6 +1,11 @@
 import socket
 import threading
 from Model.BO import HandlerDevice
+import sys
+
+from PyQt5.QtWidgets import QApplication
+
+from View.main_gui import MainWindow
 
 
 class Server:
@@ -8,7 +13,7 @@ class Server:
         self.soc = None
         self.soc_UDP = None
         self.face_names = []
-        self.host = "192.168.1.17"
+        self.host = "127.0.0.1"
         self.port = 9999
 
         self.create_socket()
@@ -21,6 +26,7 @@ class Server:
         t.start()
 
         self.handlerDevice = HandlerDevice.HandlerDevice()
+        self.drawGUI()
 
     def create_socket(self):
         try:
@@ -80,6 +86,13 @@ class Server:
         except socket.error as msg:
             print(str(msg) + ' Trying to close socket...')
             # self.close_socket()
+
+    def drawGUI(self):
+        app = QApplication(sys.argv)
+        main_win = MainWindow()
+        main_win.show()
+        # main_win.start_capture_video()
+        sys.exit(app.exec())
 
 
 if __name__ == '__main__':

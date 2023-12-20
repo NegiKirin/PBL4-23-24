@@ -11,7 +11,7 @@ from Sender import Sender
 class Device:
     def __init__(self):
         self.soc = None
-        self.host = "192.168.1.17"
+        self.host = "127.0.0.1"
         self.port = 9999
 
         self.create_socket()
@@ -33,7 +33,6 @@ class Device:
 
         self.arduino = None
         sys.exit(app.exec())
-
 
     def create_socket(self):
         try:

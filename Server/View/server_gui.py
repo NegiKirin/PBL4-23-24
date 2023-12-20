@@ -16,7 +16,7 @@ current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1198, 627)
+        MainWindow.resize(1194, 617)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet("border: none;")
         self.centralwidget.setObjectName("centralwidget")
@@ -673,6 +673,21 @@ class Ui_MainWindow(object):
         self.label_14.setAlignment(QtCore.Qt.AlignCenter)
         self.label_14.setObjectName("label_14")
         self.horizontalLayout_9.addWidget(self.label_14)
+        self.label_32 = QtWidgets.QLabel(self.widget_11)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_32.setFont(font)
+        self.label_32.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_32.setObjectName("label_32")
+        self.horizontalLayout_9.addWidget(self.label_32)
+        self.label_35 = QtWidgets.QLabel(self.widget_11)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_35.setFont(font)
+        self.label_35.setText("")
+        self.label_35.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_35.setObjectName("label_35")
+        self.horizontalLayout_9.addWidget(self.label_35)
         self.verticalLayout_14.addWidget(self.widget_11)
         self.widget_12 = QtWidgets.QWidget(self.frame_8)
         self.widget_12.setStyleSheet("QWidget{\n"
@@ -748,11 +763,22 @@ class Ui_MainWindow(object):
 "QScrollBar::add-page::vertical, QScrollBar::sub-page::vertical{\n"
 "    background: none;\n"
 "}\n"
-"\n"
-" QListView::item {\n"
-"\n"
+"QListView::item{\n"
+"    margin-top: 5px;\n"
+"    border-radius: 10px;\n"
+"}\n"
+" QListView::item:hover {\n"
+"    background-color: rgb(130, 195, 195);\n"
+"    border-radius: 10px;\n"
+" }\n"
+" QListView::item:selected {\n"
+"    background-color: rgb(130, 195, 195);\n"
 " }")
         self.student_list.setObjectName("student_list")
+        item = QtWidgets.QListWidgetItem()
+        self.student_list.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.student_list.addItem(item)
         self.horizontalLayout_10.addWidget(self.student_list)
         self.verticalLayout_14.addWidget(self.widget_12)
         self.verticalLayout_13.addWidget(self.frame_8)
@@ -841,8 +867,6 @@ class Ui_MainWindow(object):
         self.widget_14 = QtWidgets.QWidget(self.frame_9)
         self.widget_14.setObjectName("widget_14")
         self.verticalLayout_16 = QtWidgets.QVBoxLayout(self.widget_14)
-        self.verticalLayout_16.setContentsMargins(9, -1, -1, -1)
-        self.verticalLayout_16.setSpacing(5)
         self.verticalLayout_16.setObjectName("verticalLayout_16")
         spacerItem9 = QtWidgets.QSpacerItem(10, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout_16.addItem(spacerItem9)
@@ -934,10 +958,6 @@ class Ui_MainWindow(object):
 "padding-top: 5px;\n"
 "padding-bottom: 5px;\n"
 "}\n"
-"\n"
-"QDateEdit::up-arrow::vertical, QDateEdit::down-arrow::vertical{\n"
-"}\n"
-"\n"
 "")
         self.ip_date_of_birth.setObjectName("ip_date_of_birth")
         self.horizontalLayout_14.addWidget(self.ip_date_of_birth)
@@ -965,6 +985,60 @@ class Ui_MainWindow(object):
         self.label_error_dateOfBirth.setObjectName("label_error_dateOfBirth")
         self.horizontalLayout_27.addWidget(self.label_error_dateOfBirth)
         self.verticalLayout_16.addWidget(self.widget_27)
+        self.widget_30 = QtWidgets.QWidget(self.widget_14)
+        self.widget_30.setObjectName("widget_30")
+        self.horizontalLayout_30 = QtWidgets.QHBoxLayout(self.widget_30)
+        self.horizontalLayout_30.setContentsMargins(0, 10, 0, 0)
+        self.horizontalLayout_30.setSpacing(0)
+        self.horizontalLayout_30.setObjectName("horizontalLayout_30")
+        self.label_24 = QtWidgets.QLabel(self.widget_30)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_24.sizePolicy().hasHeightForWidth())
+        self.label_24.setSizePolicy(sizePolicy)
+        self.label_24.setMinimumSize(QtCore.QSize(80, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_24.setFont(font)
+        self.label_24.setObjectName("label_24")
+        self.horizontalLayout_30.addWidget(self.label_24)
+        self.ip_cccd = QtWidgets.QLineEdit(self.widget_30)
+        self.ip_cccd.setStyleSheet("QLineEdit{\n"
+"border-style: solid;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"padding-left: 10px;\n"
+"padding-right: 10px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}")
+        self.ip_cccd.setObjectName("ip_cccd")
+        self.horizontalLayout_30.addWidget(self.ip_cccd)
+        spacerItem12 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_30.addItem(spacerItem12)
+        self.verticalLayout_16.addWidget(self.widget_30)
+        self.widget_31 = QtWidgets.QWidget(self.widget_14)
+        self.widget_31.setObjectName("widget_31")
+        self.horizontalLayout_32 = QtWidgets.QHBoxLayout(self.widget_31)
+        self.horizontalLayout_32.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_32.setSpacing(10)
+        self.horizontalLayout_32.setObjectName("horizontalLayout_32")
+        self.label_9 = QtWidgets.QLabel(self.widget_31)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy)
+        self.label_9.setMinimumSize(QtCore.QSize(80, 0))
+        self.label_9.setText("")
+        self.label_9.setObjectName("label_9")
+        self.horizontalLayout_32.addWidget(self.label_9)
+        self.label_error_cccd = QtWidgets.QLabel(self.widget_31)
+        self.label_error_cccd.setStyleSheet("color: rgb(255, 85, 0);")
+        self.label_error_cccd.setObjectName("label_error_cccd")
+        self.horizontalLayout_32.addWidget(self.label_error_cccd)
+        self.verticalLayout_16.addWidget(self.widget_31)
         self.widget_20 = QtWidgets.QWidget(self.widget_14)
         self.widget_20.setObjectName("widget_20")
         self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.widget_20)
@@ -996,8 +1070,8 @@ class Ui_MainWindow(object):
 "}")
         self.ip_email.setObjectName("ip_email")
         self.horizontalLayout_15.addWidget(self.ip_email)
-        spacerItem12 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_15.addItem(spacerItem12)
+        spacerItem13 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_15.addItem(spacerItem13)
         self.verticalLayout_16.addWidget(self.widget_20)
         self.widget_28 = QtWidgets.QWidget(self.widget_14)
         self.widget_28.setObjectName("widget_28")
@@ -1109,8 +1183,8 @@ class Ui_MainWindow(object):
         self.btn_config_edit_student.setObjectName("btn_config_edit_student")
         self.horizontalLayout_17.addWidget(self.btn_config_edit_student)
         self.verticalLayout_16.addWidget(self.widget_18)
-        spacerItem13 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_16.addItem(spacerItem13)
+        spacerItem14 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_16.addItem(spacerItem14)
         self.horizontalLayout_12.addWidget(self.widget_14)
         self.horizontalLayout_11.addWidget(self.frame_9)
         self.stackedWidget.addWidget(self.page_4)
@@ -1133,8 +1207,8 @@ class Ui_MainWindow(object):
         self.widget_19.setObjectName("widget_19")
         self.horizontalLayout_18 = QtWidgets.QHBoxLayout(self.widget_19)
         self.horizontalLayout_18.setObjectName("horizontalLayout_18")
-        spacerItem14 = QtWidgets.QSpacerItem(178, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_18.addItem(spacerItem14)
+        spacerItem15 = QtWidgets.QSpacerItem(178, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_18.addItem(spacerItem15)
         self.ip_search_session = QtWidgets.QLineEdit(self.widget_19)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -1156,8 +1230,8 @@ class Ui_MainWindow(object):
 "}")
         self.ip_search_session.setObjectName("ip_search_session")
         self.horizontalLayout_18.addWidget(self.ip_search_session)
-        spacerItem15 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_18.addItem(spacerItem15)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_18.addItem(spacerItem16)
         self.btn_search_session = QtWidgets.QPushButton(self.widget_19)
         self.btn_search_session.setMinimumSize(QtCore.QSize(50, 30))
         font = QtGui.QFont()
@@ -1179,8 +1253,8 @@ class Ui_MainWindow(object):
         self.btn_search_session.setIcon(icon7)
         self.btn_search_session.setObjectName("btn_search_session")
         self.horizontalLayout_18.addWidget(self.btn_search_session)
-        spacerItem16 = QtWidgets.QSpacerItem(180, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_18.addItem(spacerItem16)
+        spacerItem17 = QtWidgets.QSpacerItem(180, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_18.addItem(spacerItem17)
         self.btd_add_session = QtWidgets.QPushButton(self.widget_19)
         self.btd_add_session.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btd_add_session.setText("")
@@ -1221,13 +1295,10 @@ class Ui_MainWindow(object):
         self.label_23.setAlignment(QtCore.Qt.AlignCenter)
         self.label_23.setObjectName("label_23")
         self.horizontalLayout_19.addWidget(self.label_23)
-        self.label_24 = QtWidgets.QLabel(self.widget_21)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_24.setFont(font)
-        self.label_24.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_24.setObjectName("label_24")
-        self.horizontalLayout_19.addWidget(self.label_24)
+        self.label_34 = QtWidgets.QLabel(self.widget_21)
+        self.label_34.setText("")
+        self.label_34.setObjectName("label_34")
+        self.horizontalLayout_19.addWidget(self.label_34)
         self.verticalLayout_17.addWidget(self.widget_21)
         self.widget_22 = QtWidgets.QWidget(self.frame_10)
         self.widget_22.setStyleSheet("QWidget{\n"
@@ -1303,11 +1374,23 @@ class Ui_MainWindow(object):
 "QScrollBar::add-page::vertical, QScrollBar::sub-page::vertical{\n"
 "    background: none;\n"
 "}\n"
-"\n"
-" QListView::item {\n"
-"\n"
+"QListView::item{\n"
+"    margin-top: 5px;\n"
+"    border-radius: 10px;\n"
+"    border-style: none;\n"
+"}\n"
+" QListView::item:hover {\n"
+"    background-color: rgb(130, 195, 195);\n"
+"    border-radius: 10px;\n"
+" }\n"
+" QListView::item:selected {\n"
+"    background-color: rgb(130, 195, 195);\n"
 " }")
         self.session_list.setObjectName("session_list")
+        item = QtWidgets.QListWidgetItem()
+        self.session_list.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.session_list.addItem(item)
         self.horizontalLayout_20.addWidget(self.session_list)
         self.verticalLayout_17.addWidget(self.widget_22)
         self.verticalLayout_18.addWidget(self.frame_10)
@@ -1339,8 +1422,8 @@ class Ui_MainWindow(object):
         self.btn_back_to_page_list_session.setIcon(icon9)
         self.btn_back_to_page_list_session.setObjectName("btn_back_to_page_list_session")
         self.horizontalLayout_24.addWidget(self.btn_back_to_page_list_session)
-        spacerItem17 = QtWidgets.QSpacerItem(178, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_24.addItem(spacerItem17)
+        spacerItem18 = QtWidgets.QSpacerItem(178, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_24.addItem(spacerItem18)
         self.ip_search_student_to_add = QtWidgets.QLineEdit(self.widget_25)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -1362,8 +1445,8 @@ class Ui_MainWindow(object):
 "}")
         self.ip_search_student_to_add.setObjectName("ip_search_student_to_add")
         self.horizontalLayout_24.addWidget(self.ip_search_student_to_add)
-        spacerItem18 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_24.addItem(spacerItem18)
+        spacerItem19 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_24.addItem(spacerItem19)
         self.btn_search_student_to_add = QtWidgets.QPushButton(self.widget_25)
         self.btn_search_student_to_add.setMinimumSize(QtCore.QSize(50, 30))
         font = QtGui.QFont()
@@ -1385,8 +1468,15 @@ class Ui_MainWindow(object):
         self.btn_search_student_to_add.setIcon(icon7)
         self.btn_search_student_to_add.setObjectName("btn_search_student_to_add")
         self.horizontalLayout_24.addWidget(self.btn_search_student_to_add)
-        spacerItem19 = QtWidgets.QSpacerItem(180, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_24.addItem(spacerItem19)
+        spacerItem20 = QtWidgets.QSpacerItem(180, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_24.addItem(spacerItem20)
+        self.btn_add_student_for_session = QtWidgets.QPushButton(self.widget_25)
+        self.btn_add_student_for_session.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_add_student_for_session.setText("")
+        self.btn_add_student_for_session.setIcon(icon8)
+        self.btn_add_student_for_session.setIconSize(QtCore.QSize(25, 25))
+        self.btn_add_student_for_session.setObjectName("btn_add_student_for_session")
+        self.horizontalLayout_24.addWidget(self.btn_add_student_for_session)
         self.verticalLayout_19.addWidget(self.widget_25)
         self.widget_24 = QtWidgets.QWidget(self.frame_11)
         self.widget_24.setObjectName("widget_24")
@@ -1527,10 +1617,10 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.btn_camera.setText(_translate("MainWindow", "          Cameras"))
-        self.btn_list_student.setText(_translate("MainWindow", "   Danh sách sinh viên"))
-        self.btn_list_session.setText(_translate("MainWindow", "         Phiên học"))
-        self.pushButton_6.setText(_translate("MainWindow", "            Cài đặt"))
+        self.btn_camera.setText(_translate("MainWindow", "    Cameras"))
+        self.btn_list_student.setText(_translate("MainWindow", "    Danh sách sinh viên"))
+        self.btn_list_session.setText(_translate("MainWindow", "    Phiên học"))
+        self.pushButton_6.setText(_translate("MainWindow", "    Cài đặt"))
         self.label.setText(_translate("MainWindow", "TextLabel"))
         self.pushButton.setText(_translate("MainWindow", "Xem chi tiết"))
         self.label_2.setText(_translate("MainWindow", "TextLabel"))
@@ -1545,13 +1635,21 @@ class Ui_MainWindow(object):
         self.pushButton_7.setText(_translate("MainWindow", "Xem chi tiết"))
         self.temperature.setText(_translate("MainWindow", "20*C"))
         self.humidity.setText(_translate("MainWindow", "50%"))
-        self.main_camera.setText(_translate("MainWindow", "TextLabel"))
+        self.main_camera.setText(_translate("MainWindow", "Camera"))
         self.btn_search_student.setText(_translate("MainWindow", " Tìm"))
         self.label_10.setText(_translate("MainWindow", "ID"))
         self.label_11.setText(_translate("MainWindow", "Họ và tên"))
         self.label_12.setText(_translate("MainWindow", "Ngày sinh"))
         self.label_13.setText(_translate("MainWindow", "Email"))
         self.label_14.setText(_translate("MainWindow", "Giới tính"))
+        self.label_32.setText(_translate("MainWindow", "CCCD"))
+        __sortingEnabled = self.student_list.isSortingEnabled()
+        self.student_list.setSortingEnabled(False)
+        item = self.student_list.item(0)
+        item.setText(_translate("MainWindow", "New Item"))
+        item = self.student_list.item(1)
+        item.setText(_translate("MainWindow", "New Item"))
+        self.student_list.setSortingEnabled(__sortingEnabled)
         self.btn_back_to_page_list_student.setText(_translate("MainWindow", "Back"))
         self.avatar.setText(_translate("MainWindow", "avatar"))
         self.btn_get_path_avatar.setText(_translate("MainWindow", "Chọn từ file"))
@@ -1559,6 +1657,8 @@ class Ui_MainWindow(object):
         self.label_error_fullname.setText(_translate("MainWindow", "TextLabel"))
         self.label_16.setText(_translate("MainWindow", "Ngày sinh:"))
         self.label_error_dateOfBirth.setText(_translate("MainWindow", "TextLabel"))
+        self.label_24.setText(_translate("MainWindow", "CCCD:"))
+        self.label_error_cccd.setText(_translate("MainWindow", "TextLabel"))
         self.label_17.setText(_translate("MainWindow", "Email:"))
         self.label_error_email.setText(_translate("MainWindow", "TextLabel"))
         self.label_18.setText(_translate("MainWindow", "Giới tính:"))
@@ -1570,7 +1670,13 @@ class Ui_MainWindow(object):
         self.label_21.setText(_translate("MainWindow", "Ngày diễn ra"))
         self.label_22.setText(_translate("MainWindow", "Thời gian bắt đầu"))
         self.label_23.setText(_translate("MainWindow", "Thời gian kết thúc"))
-        self.label_24.setText(_translate("MainWindow", "Tình trạng"))
+        __sortingEnabled = self.session_list.isSortingEnabled()
+        self.session_list.setSortingEnabled(False)
+        item = self.session_list.item(0)
+        item.setText(_translate("MainWindow", "New Item"))
+        item = self.session_list.item(1)
+        item.setText(_translate("MainWindow", "New Item"))
+        self.session_list.setSortingEnabled(__sortingEnabled)
         self.btn_back_to_page_list_session.setText(_translate("MainWindow", "Back"))
         self.btn_search_student_to_add.setText(_translate("MainWindow", "Tìm"))
         self.label_25.setText(_translate("MainWindow", "ID"))

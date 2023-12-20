@@ -61,7 +61,7 @@ class Sender:
                 msg = self.soc.recv(102400)
                 if new_msg:
                     msglen = int(msg[:HEADERSIZE])
-                    print(msglen)
+                    # print(msglen)
                     new_msg = False
 
                 full_msg += msg
@@ -103,6 +103,22 @@ class Sender:
             
             gui.startDetector(images, users)
             return images, users
+        except socket.error as e:
+            print(str(e))
+        except Exception as e:
+            print(e)
+
+    def sendSessionIdAndUserId(self, sessionId, userId):
+        try:
+            print('send commands')
+            self.soc.sendall(str(Commands.SEND_SESSIONID_AND_USERID.value).encode('utf8'))
+            self.soc.recv(1024)
+
+            sessionAndUser = [sessionId, userId]
+            data = pickle.dumps(sessionAndUser)
+            data = bytes(f"{len(data):<{HEADERSIZE}}", 'utf-8') + data
+            self.soc.sendall(data)
+
         except socket.error as e:
             print(str(e))
         except Exception as e:

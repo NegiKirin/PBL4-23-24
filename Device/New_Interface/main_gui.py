@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
         if cccd == self.user.cccd:
             print('OK')
             # todo: update for student
-            self.send.sendSessionIdAndUserId(self.sessions.id, self.user.id)
+            self.send.sendSessionIdAndUserId(self.sessions[self.selected_row].id, self.user.id)
 
             t = threading.Thread(target=self.detector.face_detection, args=[self])
             t.setDaemon = True
@@ -147,8 +147,7 @@ class MainWindow(QMainWindow):
             return
         if self.sessions != []:
             # set row in list widget
-            self.addItemForSession(self.results)
-
+            self.addItemForSession(self.sessions)
             self.uic.stackedWidget.setCurrentWidget(self.uic.page_2)
 
     def addItemForSession(self, sessions):
@@ -256,6 +255,7 @@ class MainWindow(QMainWindow):
     def select_items(self, item):
         row = self.uic.listWidget.row(item)
         # send session id return image data
+        self.selected_row = row
         t = threading.Thread(target=self.send.sendIdSession, args=[self.sessions[row].id, self])
         t.setDaemon = True
         t.start()

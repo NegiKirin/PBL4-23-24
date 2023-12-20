@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>796</width>
-    <height>46</height>
+    <width>800</width>
+    <height>62</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,15 +32,6 @@
     </property>
     <item>
      <widget class="QFrame" name="frame">
-      <property name="styleSheet">
-       <string notr="true">QWidget:hover{
-	background-color: rgb(130, 195, 195);
-}
-
-QWidget{
-	border: none;
-}</string>
-      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -48,22 +39,10 @@ QWidget{
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="leftMargin">
-        <number>7</number>
-       </property>
-       <property name="topMargin">
-        <number>7</number>
-       </property>
-       <property name="rightMargin">
-        <number>7</number>
-       </property>
-       <property name="bottomMargin">
-        <number>7</number>
-       </property>
        <item>
-        <widget class="QLabel" name="id">
+        <widget class="QLabel" name="room_number">
          <property name="text">
-          <string>1</string>
+          <string>E102</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -81,9 +60,9 @@ QWidget{
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fullname">
+        <widget class="QLabel" name="day">
          <property name="text">
-          <string>Ho Duy Phuc</string>
+          <string>20-10-2002</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -101,9 +80,9 @@ QWidget{
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="dataOfBirth">
+        <widget class="QLabel" name="start_time">
          <property name="text">
-          <string>2002-22-22</string>
+          <string>10:30</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -121,9 +100,9 @@ QWidget{
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="email">
+        <widget class="QLabel" name="end_time">
          <property name="text">
-          <string>phuc@gmail.com</string>
+          <string>12:30</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -141,28 +120,11 @@ QWidget{
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="gender">
-         <property name="text">
-          <string>Nam</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="Line" name="line_5">
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(74, 114, 118);</string>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QWidget" name="widget" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <property name="leftMargin">
            <number>0</number>
           </property>
@@ -175,8 +137,8 @@ QWidget{
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="btn_remove_student">
+          <item>
+           <widget class="QPushButton" name="btn_delete_session">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -205,6 +167,12 @@ QPushButton:pressed {
             <property name="icon">
              <iconset resource="resources.qrc">
               <normaloff>:/icons/images/icons/icons8-delete-30.png</normaloff>:/icons/images/icons/icons8-delete-30.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>16</width>
+              <height>16</height>
+             </size>
             </property>
            </widget>
           </item>

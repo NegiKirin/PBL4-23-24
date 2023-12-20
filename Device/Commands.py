@@ -8,3 +8,4 @@ class Commands(Enum):
     DIAGRAM = -5
     SEND_IMAGES_FOR_DEVICE = -6
     SEND_ROOM_NUMBER = -7
+    SEND_SESSIONID_AND_USERID = -8

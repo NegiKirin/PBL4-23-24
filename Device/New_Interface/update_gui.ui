@@ -280,7 +280,7 @@ background-color: rgb(165, 165, 165);
 </string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="page_3">
           <property name="styleSheet">
@@ -1032,7 +1032,7 @@ border-radius: 10px;
                     </font>
                    </property>
                    <property name="text">
-                    <string>Ca Thi : </string>
+                    <string>Phòng thi:</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1040,14 +1040,14 @@ border-radius: 10px;
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_session">
+                  <widget class="QLabel" name="label_room_number">
                    <property name="font">
                     <font>
                      <pointsize>12</pointsize>
                     </font>
                    </property>
                    <property name="text">
-                    <string>12C</string>
+                    <string>ABC</string>
                    </property>
                   </widget>
                  </item>

@@ -13,6 +13,7 @@ sys.path.append(current_directory)
 from Util import Connection
 from Model.Bean.Session import Session
 from Model.Bean.Room import Room
+from Model.DAO.RoomDAO import RoomDAO
 
 
 class SessionDAO:
@@ -21,14 +22,20 @@ class SessionDAO:
         self.myCursor = self.connect.cursor()
 
     def getAll(self):
-        sql = 'SELECT * FROM session'
-        self.myCursor.execute(sql)
-        result = self.myCursor.fetchall()
-        sessions = []
-        for item in result:
-            session = Session(item[0], item[1], item[2], item[3], item[4], item[4])
-            sessions.append(session)
-        return sessions
+        try:
+            sql = 'SELECT * FROM session'
+            self.myCursor.execute(sql)
+            result = self.myCursor.fetchall()
+            sessions = []
+            for item in result:
+                session = Session(item[0], item[1], item[2], item[3], item[4], item[4])
+                room = RoomDAO().getById(item[1])
+                session.room = room
+                sessions.append(session)
+            return sessions
+        except Exception as e:
+            print(e)
+            return []
 
     def getById(self, id):
         sql = 'SELECT * FROM session WHERE id = ' + id
@@ -37,7 +44,6 @@ class SessionDAO:
         item = result[0]
         session = Session(item[0], item[1], item[2], item[3], item[4], item[5])
         return session
-
 
     def getStudentForSession(self, idSession):
         sql = 'SELECT * FROM student_join_session WHERE id_session = ' + str(idSession)
@@ -62,6 +68,19 @@ class SessionDAO:
             sessions.append(session)
         return sessions
 
+    def deleteById(self, sessionId):
+        try:
+            sql = 'DELETE FROM session WHERE id = %s'
+            self.myCursor.execute(sql, [sessionId])
+            self.connect.commit()
+        except Exception as e:
+            print(e)
+
+    def insertSession(self, roomId, status, day, startTime, endTime):
+        try:
+            sql = 'INSERT INTO session (id_room, status, day, start_time, end_time) Values (%s, %s, %s, %s, %s)'
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
