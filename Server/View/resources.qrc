@@ -4,6 +4,8 @@
     <file>images/images/PyDracula_vertical.png</file>
   </qresource>
   <qresource prefix="icons">
+    <file>images/icons/icons8-down-48.png</file>
+    <file>images/icons/icons8-up-48.png</file>
     <file>images/icons/icons8-delete-30.png</file>
     <file>images/icons/icons8-back-50.png</file>
     <file>images/icons/icons8-plus-50 (1).png</file>

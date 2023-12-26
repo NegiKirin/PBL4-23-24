@@ -63,6 +63,7 @@ class UserDAO:
             users = []
             for item in result:
                 user = User(item[0], item[1], item[2], item[3], item[4], item[5], item[6])
+                user.status = item[9]
                 users.append(user)
             return users
         except Exception as e:

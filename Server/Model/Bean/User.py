@@ -10,3 +10,4 @@ class User:
         self.cccd = cccd
         self.listSession = []
         self.role = None
+        self.status = None

@@ -545,6 +545,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addWidget(self.humidity)
         self.verticalLayout_12.addWidget(self.widget_9)
         self.main_camera = QtWidgets.QLabel(self.page_2)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.main_camera.setFont(font)
         self.main_camera.setStyleSheet("QLabel{\n"
 "    background-color: rgb(227, 227, 227);\n"
 "    border-radius: 5px;\n"
@@ -958,7 +961,21 @@ class Ui_MainWindow(object):
 "padding-top: 5px;\n"
 "padding-bottom: 5px;\n"
 "}\n"
-"")
+"QDateEdit::down-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right bottom;\n"
+"    width: 20px;\n"
+"    image: url(View/images/icons/icons8-down-48.png);\n"
+"    padding-right: 5px;\n"
+"}\n"
+"\n"
+"QDateEdit::up-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right top;\n"
+"    width: 20px;\n"
+"    image: url(View/images/icons/icons8-up-48.png);\n"
+"    padding-right: 5px;\n"
+"}")
         self.ip_date_of_birth.setObjectName("ip_date_of_birth")
         self.horizontalLayout_14.addWidget(self.ip_date_of_birth)
         spacerItem11 = QtWidgets.QSpacerItem(150, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
@@ -1255,13 +1272,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout_18.addWidget(self.btn_search_session)
         spacerItem17 = QtWidgets.QSpacerItem(180, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_18.addItem(spacerItem17)
-        self.btd_add_session = QtWidgets.QPushButton(self.widget_19)
-        self.btd_add_session.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btd_add_session.setText("")
-        self.btd_add_session.setIcon(icon8)
-        self.btd_add_session.setIconSize(QtCore.QSize(25, 25))
-        self.btd_add_session.setObjectName("btd_add_session")
-        self.horizontalLayout_18.addWidget(self.btd_add_session)
+        self.btn_add_session = QtWidgets.QPushButton(self.widget_19)
+        self.btn_add_session.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_add_session.setText("")
+        self.btn_add_session.setIcon(icon8)
+        self.btn_add_session.setIconSize(QtCore.QSize(25, 25))
+        self.btn_add_session.setObjectName("btn_add_session")
+        self.horizontalLayout_18.addWidget(self.btn_add_session)
         self.verticalLayout_17.addWidget(self.widget_19)
         self.widget_21 = QtWidgets.QWidget(self.frame_10)
         self.widget_21.setObjectName("widget_21")
@@ -1517,6 +1534,12 @@ class Ui_MainWindow(object):
         self.label_29.setAlignment(QtCore.Qt.AlignCenter)
         self.label_29.setObjectName("label_29")
         self.horizontalLayout_23.addWidget(self.label_29)
+        self.label_37 = QtWidgets.QLabel(self.widget_24)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_37.setFont(font)
+        self.label_37.setObjectName("label_37")
+        self.horizontalLayout_23.addWidget(self.label_37)
         self.label_30 = QtWidgets.QLabel(self.widget_24)
         self.label_30.setText("")
         self.label_30.setObjectName("label_30")
@@ -1596,15 +1619,312 @@ class Ui_MainWindow(object):
 "QScrollBar::add-page::vertical, QScrollBar::sub-page::vertical{\n"
 "    background: none;\n"
 "}\n"
-"\n"
-" QListView::item {\n"
-"\n"
+"QListView::item{\n"
+"    margin-top: 5px;\n"
+"    border-radius: 10px;\n"
+"    border-style: none;\n"
+"}\n"
+" QListView::item:hover {\n"
+"    background-color: rgb(130, 195, 195);\n"
+"    border-radius: 10px;\n"
+" }\n"
+" QListView::item:selected {\n"
+"    background-color: rgb(130, 195, 195);\n"
 " }")
         self.student_list_to_add.setObjectName("student_list_to_add")
+        item = QtWidgets.QListWidgetItem()
+        self.student_list_to_add.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.student_list_to_add.addItem(item)
         self.horizontalLayout_22.addWidget(self.student_list_to_add)
         self.verticalLayout_19.addWidget(self.widget_23)
         self.horizontalLayout_21.addWidget(self.frame_11)
         self.stackedWidget.addWidget(self.page_6)
+        self.page_7 = QtWidgets.QWidget()
+        self.page_7.setStyleSheet("#page_7{\n"
+"background-color: rgb(202, 202, 202);\n"
+"}\n"
+"")
+        self.page_7.setObjectName("page_7")
+        self.verticalLayout_20 = QtWidgets.QVBoxLayout(self.page_7)
+        self.verticalLayout_20.setObjectName("verticalLayout_20")
+        self.widget_32 = QtWidgets.QWidget(self.page_7)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_32.sizePolicy().hasHeightForWidth())
+        self.widget_32.setSizePolicy(sizePolicy)
+        self.widget_32.setObjectName("widget_32")
+        self.horizontalLayout_31 = QtWidgets.QHBoxLayout(self.widget_32)
+        self.horizontalLayout_31.setObjectName("horizontalLayout_31")
+        self.btn_back_to_page_list_session_2 = QtWidgets.QPushButton(self.widget_32)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.btn_back_to_page_list_session_2.setFont(font)
+        self.btn_back_to_page_list_session_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_back_to_page_list_session_2.setIcon(icon9)
+        self.btn_back_to_page_list_session_2.setObjectName("btn_back_to_page_list_session_2")
+        self.horizontalLayout_31.addWidget(self.btn_back_to_page_list_session_2)
+        spacerItem21 = QtWidgets.QSpacerItem(833, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_31.addItem(spacerItem21)
+        self.verticalLayout_20.addWidget(self.widget_32)
+        self.widget_33 = QtWidgets.QWidget(self.page_7)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.widget_33.sizePolicy().hasHeightForWidth())
+        self.widget_33.setSizePolicy(sizePolicy)
+        self.widget_33.setObjectName("widget_33")
+        self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.widget_33)
+        self.verticalLayout_21.setObjectName("verticalLayout_21")
+        self.widget_34 = QtWidgets.QWidget(self.widget_33)
+        self.widget_34.setObjectName("widget_34")
+        self.horizontalLayout_33 = QtWidgets.QHBoxLayout(self.widget_34)
+        self.horizontalLayout_33.setObjectName("horizontalLayout_33")
+        spacerItem22 = QtWidgets.QSpacerItem(50, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_33.addItem(spacerItem22)
+        self.label_36 = QtWidgets.QLabel(self.widget_34)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_36.sizePolicy().hasHeightForWidth())
+        self.label_36.setSizePolicy(sizePolicy)
+        self.label_36.setMinimumSize(QtCore.QSize(120, 0))
+        self.label_36.setObjectName("label_36")
+        self.horizontalLayout_33.addWidget(self.label_36)
+        self.select_room = QtWidgets.QComboBox(self.widget_34)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.select_room.sizePolicy().hasHeightForWidth())
+        self.select_room.setSizePolicy(sizePolicy)
+        self.select_room.setMinimumSize(QtCore.QSize(300, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.select_room.setFont(font)
+        self.select_room.setStyleSheet("\n"
+"QComboBox{\n"
+"border-style: solid;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"padding-left: 10px;\n"
+"padding-right: 10px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid; \n"
+"    border-top-right-radius: 3px; \n"
+"    border-bottom-right-radius: 3px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    image: url(View/images/icons/icons8-down-48.png);\n"
+"    width: 15px;\n"
+"\n"
+"}\n"
+"")
+        self.select_room.setObjectName("select_room")
+        self.select_room.addItem("")
+        self.select_room.addItem("")
+        self.horizontalLayout_33.addWidget(self.select_room)
+        spacerItem23 = QtWidgets.QSpacerItem(376, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_33.addItem(spacerItem23)
+        self.verticalLayout_21.addWidget(self.widget_34)
+        self.widget_35 = QtWidgets.QWidget(self.widget_33)
+        self.widget_35.setObjectName("widget_35")
+        self.horizontalLayout_34 = QtWidgets.QHBoxLayout(self.widget_35)
+        self.horizontalLayout_34.setObjectName("horizontalLayout_34")
+        spacerItem24 = QtWidgets.QSpacerItem(50, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_34.addItem(spacerItem24)
+        self.label_38 = QtWidgets.QLabel(self.widget_35)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_38.sizePolicy().hasHeightForWidth())
+        self.label_38.setSizePolicy(sizePolicy)
+        self.label_38.setMinimumSize(QtCore.QSize(120, 0))
+        self.label_38.setObjectName("label_38")
+        self.horizontalLayout_34.addWidget(self.label_38)
+        self.ip_day_session = QtWidgets.QDateEdit(self.widget_35)
+        self.ip_day_session.setMinimumSize(QtCore.QSize(300, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.ip_day_session.setFont(font)
+        self.ip_day_session.setStyleSheet("QDateEdit{\n"
+"border-style: solid;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"padding-left: 10px;\n"
+"padding-right: 10px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}\n"
+"\n"
+"QDateEdit::down-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right bottom;\n"
+"    width: 16px;\n"
+"    image: url(View/images/icons/icons8-down-48.png);\n"
+"    padding-right: 5px;\n"
+"}\n"
+"\n"
+"QDateEdit::up-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right top;\n"
+"    width: 16px;\n"
+"    image: url(View/images/icons/icons8-up-48.png);\n"
+"    padding-right: 5px;\n"
+"}\n"
+"\n"
+"QDateEdit::drop-down {\n"
+"    subcontrol-origin: padding;\n"
+"    subcontrol-position: top right;\n"
+"    width: 15px;\n"
+"    border-left-width: 1px;\n"
+"    border-left-color: darkgray;\n"
+"    border-left-style: solid;\n"
+"    border-top-right-radius: 3px;\n"
+"    border-bottom-right-radius: 3px;\n"
+"    background: white;\n"
+"}")
+        self.ip_day_session.setObjectName("ip_day_session")
+        self.horizontalLayout_34.addWidget(self.ip_day_session)
+        spacerItem25 = QtWidgets.QSpacerItem(376, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_34.addItem(spacerItem25)
+        self.verticalLayout_21.addWidget(self.widget_35)
+        self.widget_36 = QtWidgets.QWidget(self.widget_33)
+        self.widget_36.setObjectName("widget_36")
+        self.horizontalLayout_36 = QtWidgets.QHBoxLayout(self.widget_36)
+        self.horizontalLayout_36.setObjectName("horizontalLayout_36")
+        spacerItem26 = QtWidgets.QSpacerItem(50, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_36.addItem(spacerItem26)
+        self.label_39 = QtWidgets.QLabel(self.widget_36)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_39.sizePolicy().hasHeightForWidth())
+        self.label_39.setSizePolicy(sizePolicy)
+        self.label_39.setMinimumSize(QtCore.QSize(120, 0))
+        self.label_39.setObjectName("label_39")
+        self.horizontalLayout_36.addWidget(self.label_39)
+        self.ip_start_time_session = QtWidgets.QTimeEdit(self.widget_36)
+        self.ip_start_time_session.setMinimumSize(QtCore.QSize(300, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.ip_start_time_session.setFont(font)
+        self.ip_start_time_session.setStyleSheet("QTimeEdit{\n"
+"border-style: solid;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"padding-left: 10px;\n"
+"padding-right: 10px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}\n"
+"QTimeEdit::down-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right bottom;\n"
+"    width: 16px;\n"
+"    image: url(View/images/icons/icons8-down-48.png);\n"
+"    padding-right: 5px;\n"
+"}\n"
+"\n"
+"QTimeEdit::up-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right top;\n"
+"    width: 16px;\n"
+"    image: url(View/images/icons/icons8-up-48.png);\n"
+"    padding-right: 5px;\n"
+"}")
+        self.ip_start_time_session.setObjectName("ip_start_time_session")
+        self.horizontalLayout_36.addWidget(self.ip_start_time_session)
+        spacerItem27 = QtWidgets.QSpacerItem(376, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_36.addItem(spacerItem27)
+        self.verticalLayout_21.addWidget(self.widget_36)
+        self.widget_37 = QtWidgets.QWidget(self.widget_33)
+        self.widget_37.setObjectName("widget_37")
+        self.horizontalLayout_35 = QtWidgets.QHBoxLayout(self.widget_37)
+        self.horizontalLayout_35.setObjectName("horizontalLayout_35")
+        spacerItem28 = QtWidgets.QSpacerItem(50, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_35.addItem(spacerItem28)
+        self.label_40 = QtWidgets.QLabel(self.widget_37)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_40.sizePolicy().hasHeightForWidth())
+        self.label_40.setSizePolicy(sizePolicy)
+        self.label_40.setMinimumSize(QtCore.QSize(120, 0))
+        self.label_40.setObjectName("label_40")
+        self.horizontalLayout_35.addWidget(self.label_40)
+        self.ip_end_time_session = QtWidgets.QTimeEdit(self.widget_37)
+        self.ip_end_time_session.setMinimumSize(QtCore.QSize(300, 0))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.ip_end_time_session.setFont(font)
+        self.ip_end_time_session.setStyleSheet("QTimeEdit{\n"
+"border-style: solid;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"padding-left: 10px;\n"
+"padding-right: 10px;\n"
+"padding-top: 5px;\n"
+"padding-bottom: 5px;\n"
+"}\n"
+"QTimeEdit::down-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right bottom;\n"
+"    width: 16px;\n"
+"    image: url(View/images/icons/icons8-down-48.png);\n"
+"    padding-right: 5px;\n"
+"}\n"
+"\n"
+"QTimeEdit::up-button {\n"
+"    subcontrol-origin: border;\n"
+"    subcontrol-position: right top;\n"
+"    width: 16px;\n"
+"    image: url(View/images/icons/icons8-up-48.png);\n"
+"    padding-right: 5px;\n"
+"}")
+        self.ip_end_time_session.setObjectName("ip_end_time_session")
+        self.horizontalLayout_35.addWidget(self.ip_end_time_session)
+        spacerItem29 = QtWidgets.QSpacerItem(376, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_35.addItem(spacerItem29)
+        self.verticalLayout_21.addWidget(self.widget_37)
+        self.widget_38 = QtWidgets.QWidget(self.widget_33)
+        self.widget_38.setObjectName("widget_38")
+        self.horizontalLayout_37 = QtWidgets.QHBoxLayout(self.widget_38)
+        self.horizontalLayout_37.setObjectName("horizontalLayout_37")
+        self.btn_config_add_session = QtWidgets.QPushButton(self.widget_38)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.btn_config_add_session.sizePolicy().hasHeightForWidth())
+        self.btn_config_add_session.setSizePolicy(sizePolicy)
+        self.btn_config_add_session.setMinimumSize(QtCore.QSize(100, 30))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.btn_config_add_session.setFont(font)
+        self.btn_config_add_session.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_config_add_session.setStyleSheet("QPushButton{\n"
+"  background-color: #878787;\n"
+"  border-style: solid;\n"
+"  border-width: 1px;\n"
+"border-radius: 5px;\n"
+"}")
+        self.btn_config_add_session.setObjectName("btn_config_add_session")
+        self.horizontalLayout_37.addWidget(self.btn_config_add_session)
+        self.verticalLayout_21.addWidget(self.widget_38)
+        spacerItem30 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_21.addItem(spacerItem30)
+        self.verticalLayout_20.addWidget(self.widget_33)
+        self.stackedWidget.addWidget(self.page_7)
         self.horizontalLayout_25.addWidget(self.stackedWidget)
         self.horizontalLayout_3.addWidget(self.frame_3)
         self.verticalLayout.addWidget(self.frame_2)
@@ -1684,6 +2004,22 @@ class Ui_MainWindow(object):
         self.label_27.setText(_translate("MainWindow", "Ngày sinh"))
         self.label_28.setText(_translate("MainWindow", "Email"))
         self.label_29.setText(_translate("MainWindow", "Giới tính"))
+        self.label_37.setText(_translate("MainWindow", "Trang thái"))
+        __sortingEnabled = self.student_list_to_add.isSortingEnabled()
+        self.student_list_to_add.setSortingEnabled(False)
+        item = self.student_list_to_add.item(0)
+        item.setText(_translate("MainWindow", "New Item"))
+        item = self.student_list_to_add.item(1)
+        item.setText(_translate("MainWindow", "New Item"))
+        self.student_list_to_add.setSortingEnabled(__sortingEnabled)
+        self.btn_back_to_page_list_session_2.setText(_translate("MainWindow", "Back"))
+        self.label_36.setText(_translate("MainWindow", "Phòng:"))
+        self.select_room.setItemText(0, _translate("MainWindow", "New Item"))
+        self.select_room.setItemText(1, _translate("MainWindow", "New Item"))
+        self.label_38.setText(_translate("MainWindow", "Ngày diễn ra:"))
+        self.label_39.setText(_translate("MainWindow", "Thời gian bắt đầu:"))
+        self.label_40.setText(_translate("MainWindow", "Thời gian kết thúc:"))
+        self.btn_config_add_session.setText(_translate("MainWindow", "Xác Nhận"))
 
 
 if __name__ == "__main__":

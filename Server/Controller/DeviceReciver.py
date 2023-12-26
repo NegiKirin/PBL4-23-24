@@ -28,7 +28,7 @@ class DeviceReceiver:
         self.data = '../database'
 
         t = threading.Thread(target=self.run, args=())
-        t.setDaemon = True
+        # t.setDaemon = True
         t.start()
 
     def sendImage(self):

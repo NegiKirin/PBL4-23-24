@@ -76,9 +76,11 @@ class SessionDAO:
         except Exception as e:
             print(e)
 
-    def insertSession(self, roomId, status, day, startTime, endTime):
+    def insertSession(self, roomId, day, startTime, endTime):
         try:
-            sql = 'INSERT INTO session (id_room, status, day, start_time, end_time) Values (%s, %s, %s, %s, %s)'
+            sql = 'INSERT INTO session (id_room, status, day, start_time, end_time) Values (%s, 0, %s, %s, %s)'
+            self.myCursor.execute(sql, [roomId, day, startTime, endTime])
+            self.connect.commit()
         except Exception as e:
             print(e)
 

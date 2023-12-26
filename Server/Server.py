@@ -22,7 +22,7 @@ class Server:
         self.listening_socket(1)
 
         t = threading.Thread(target=self.accept_socket, args=())
-        t.setDaemon = True
+        # t.setDaemon = True
         t.start()
 
         self.handlerDevice = HandlerDevice.HandlerDevice()
@@ -31,6 +31,7 @@ class Server:
     def create_socket(self):
         try:
             self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # self.soc.settimeout(1)
             print('Has been created a socket server')
         except socket.error as msg:
             print(str(msg) + ' .Trying to connecting again...')
@@ -92,7 +93,7 @@ class Server:
         main_win = MainWindow()
         main_win.show()
         # main_win.start_capture_video()
-        sys.exit(app.exec())
+        sys.exit(app.exec_())
 
 
 if __name__ == '__main__':

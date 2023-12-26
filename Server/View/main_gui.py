@@ -1,14 +1,17 @@
 import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import shutil
 import sys
 import threading
 import time
 import traceback
 from PIL import Image
+from ultralytics import YOLO
+
 
 import cv2
 from PyQt5 import QtGui, QtCore, QtWidgets
-from PyQt5.QtCore import QThread, pyqtSignal, Qt, QSize, QDate, QEvent
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QSize, QDate, QEvent, QTime
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QFileDialog
 import numpy as np
@@ -23,6 +26,7 @@ from server_gui import Ui_MainWindow
 from Dialog import Ui_Dialog
 from Model.DAO.UserDAO import UserDAO
 from Model.DAO.SessionDAO import SessionDAO
+from Model.DAO.RoomDAO import RoomDAO
 
 
 class MainWindow(QMainWindow):
@@ -101,7 +105,7 @@ class MainWindow(QMainWindow):
         # search session by room_number
         self.uic.btn_search_session.clicked.connect(self.searchSession)
         # change page add session
-        # todo: create page add session
+        self.uic.btn_add_session.clicked.connect(self.changePageAddSession)
         # selected item in student list
         self.uic.session_list.itemDoubleClicked.connect(self.select_session_in_session_list)
         # selection change
@@ -113,8 +117,16 @@ class MainWindow(QMainWindow):
         # add student for session
         self.uic.btn_add_student_for_session.clicked.connect(self.openDialogAddStudentToSession)
 
+        # -- on page add session
+        # back to page list session
+        self.uic.btn_back_to_page_list_session_2.clicked.connect(self.changePageSessionList)
+        # config add session
+        self.uic.btn_config_add_session.clicked.connect(self.configAddSession)
+
         # all thread
         self.thread = {}
+        self.start_capture_video()
+
 
     def convert_cv_qt(self, cv_img, width, height):
         # Convert from an opencv image to QPixmap
@@ -128,9 +140,20 @@ class MainWindow(QMainWindow):
     def stop_capture_video(self):
         self.thread[1].stop()
 
+    def start_capture_video(self):
+        self.thread[1] = Capture_Video(index=1)
+        self.thread[1].start()
+        self.thread[1].signal.connect(self.show_webcam)
+
+    def show_webcam(self, cv_img):
+        # Update the image_label with a new opencv image
+        qt_img = self.convert_cv_qt(cv_img, 800, 600)
+        self.uic.main_camera.setPixmap(qt_img)
+
     # function close window
     def closeEvent(self, event):
         self.close()
+        self.stop_capture_video()
 
     #function restore window
     def Window_restore(self):
@@ -348,6 +371,7 @@ class MainWindow(QMainWindow):
             for list_item in self.list_item_in_list_session:
                 if list_item[0] == pointer_to_widget:
                     list_item[1].show()
+                    self.selected_session_id = list_item[-1].id
             # for list_item in self.list_item_in_list_student_to_add:
             #     if list_item[0] == pointer_to_widget:
             #         self.selected_student_id = list_item[-1].id
@@ -510,6 +534,7 @@ class MainWindow(QMainWindow):
             self.horizontalLayout.addWidget(self.widget)
             self.verticalLayout.addWidget(self.frame)
 
+            self.btn_delete_session.clicked.connect(self.deleteSession)
             self.btn_delete_session.hide()
             self.centralwidget.installEventFilter(self)
 
@@ -566,6 +591,10 @@ class MainWindow(QMainWindow):
         row = self.uic.session_list.row(item)
         self.selected_session_id = self.list_session[row].id
         # print(type(self.selected_student_id))
+
+    def deleteSession(self):
+        SessionDAO().deleteById(self.selected_session_id)
+        self.changePageSessionList()
 
     def ChangePageStudentInSession(self, sessionId):
         self.uic.stackedWidget.setCurrentWidget(self.uic.page_6)
@@ -657,6 +686,17 @@ class MainWindow(QMainWindow):
             self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
             self.line_5.setObjectName("line_5")
             self.horizontalLayout.addWidget(self.line_5)
+            self.check_in = QtWidgets.QLabel(self.frame)
+            font = QtGui.QFont()
+            font.setBold(True)
+            font.setWeight(75)
+            self.check_in.setFont(font)
+            self.check_in.setStyleSheet("color: rgb(0, 213, 0);")
+            self.check_in.setAlignment(QtCore.Qt.AlignCenter)
+            self.check_in.setObjectName("check_in")
+            if user.status == 1:
+                self.check_in.setText('Đã vào')
+            self.horizontalLayout.addWidget(self.check_in)
             self.widget = QtWidgets.QWidget(self.frame)
             self.widget.setObjectName("widget")
             self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget)
@@ -689,8 +729,8 @@ class MainWindow(QMainWindow):
             self.verticalLayout_2.addWidget(self.btn_remove_student, 0, QtCore.Qt.AlignHCenter)
             self.horizontalLayout.addWidget(self.widget)
             self.verticalLayout.addWidget(self.frame)
-            self.btn_remove_student.clicked.connect(self.removeStudent)
 
+            self.btn_remove_student.clicked.connect(self.removeStudent)
             self.btn_remove_student.hide()
             self.centralwidget.installEventFilter(self)
 
@@ -701,6 +741,7 @@ class MainWindow(QMainWindow):
             self.dataOfBirth.setAttribute(QtCore.Qt.WA_TranslucentBackground)
             self.email.setAttribute(QtCore.Qt.WA_TranslucentBackground)
             self.gender.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+            self.check_in.setAttribute(QtCore.Qt.WA_TranslucentBackground)
             self.widget.setAttribute(QtCore.Qt.WA_TranslucentBackground)
             self.btn_remove_student.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
@@ -829,6 +870,31 @@ class MainWindow(QMainWindow):
         self.window.close()
         self.ChangePageStudentInSession(self.selected_session_id)
 
+    def changePageAddSession(self):
+        self.uic.stackedWidget.setCurrentWidget(self.uic.page_7)
+        self.rooms = RoomDAO().getAll()
+        self.uic.select_room.clear()
+        for room in self.rooms:
+            self.uic.select_room.addItem(room.roomNumber)
+        self.uic.ip_day_session.setDate(QDate.currentDate())
+        self.uic.ip_start_time_session.setTime(QTime.currentTime())
+        self.uic.ip_end_time_session.setTime(QTime.currentTime())
+
+    def configAddSession(self):
+        roomNumber = self.uic.select_room.currentText()
+        day = self.uic.ip_day_session.date().toString('yyyy-MM-dd')
+        startTime = self.uic.ip_start_time_session.time().toString('HH:mm')
+        endTime = self.uic.ip_end_time_session.time().toString('HH:mm')
+        for room in self.rooms:
+            if room.roomNumber == roomNumber:
+                roomId = room.id
+        print(roomId)
+        print(day)
+        print(startTime)
+        print(endTime)
+        SessionDAO().insertSession(roomId, day, startTime, endTime)
+        self.changePageSessionList()
+
     def addStudent(self):
         fullname, dateOfBirth, cccd, email, gender, allow = self.getParameterOnPageAddingStudent()
         print(fullname)
@@ -944,28 +1010,35 @@ class MainWindow(QMainWindow):
 class Capture_Video(QThread):
     signal = pyqtSignal(np.ndarray)
 
-    def __init__(self, index, detector=None):
+    def __init__(self, index):
         self.index = index
-        self.detector = detector
         print('start threading', self.index)
         super(Capture_Video, self).__init__()
 
-    # def run(self):
-    #     cap = cv2.VideoCapture(0)
-    #     while True:
-    #         ret, frame = cap.read()
-    #         if ret:
-    #             self.signal.emit(frame)
-
     def run(self):
-        try:
-            if self.detector.img == None:
-                time.sleep(1)
-                self.run()
-            while True:
-                self.signal.emit(self.detector.img)
-        except Exception as e:
-            print(str(e))
+        cap = cv2.VideoCapture(0)
+        model = YOLO("Model/YOLO/best_v02.pt")
+        while True:
+            ret, frame = cap.read()
+            if ret == True:
+                results = model(frame)[0]
+                for result in results.boxes.data.tolist():
+                    x1, y1, x2, y2, score, class_id = result
+                    if score > 0.5:
+                        cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 4)
+                        cv2.putText(frame, results.names[int(class_id)].upper(), (int(x1), int(y1 - 10)),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3, cv2.LINE_AA)
+                self.signal.emit(frame)
+
+    # def run(self):
+    #     try:
+    #         if self.detector.img == None:
+    #             time.sleep(1)
+    #             self.run()
+    #         while True:
+    #             self.signal.emit(self.detector.img)
+    #     except Exception as e:
+    #         print(str(e))
 
     def stop(self):
         print('stop threading', self.index)

@@ -161,6 +161,25 @@ QWidget{
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="check_in">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 213, 0);</string>
+         </property>
+         <property name="text">
+          <string>Đã vào</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QWidget" name="widget" native="true">
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="leftMargin">

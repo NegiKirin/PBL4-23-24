@@ -17,7 +17,6 @@ class HandlerDevice:
         self.devices = []
         #run
         t = threading.Thread(target=self.checkActive, args=())
-        t.setDaemon = True
         t.start()
 
     def appendDevice(self, conn):

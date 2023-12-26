@@ -85,6 +85,15 @@ class Ui_MainWindow(object):
         self.line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_5.setObjectName("line_5")
         self.horizontalLayout.addWidget(self.line_5)
+        self.check_in = QtWidgets.QLabel(self.frame)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.check_in.setFont(font)
+        self.check_in.setStyleSheet("color: rgb(0, 213, 0);")
+        self.check_in.setAlignment(QtCore.Qt.AlignCenter)
+        self.check_in.setObjectName("check_in")
+        self.horizontalLayout.addWidget(self.check_in)
         self.widget = QtWidgets.QWidget(self.frame)
         self.widget.setObjectName("widget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget)
@@ -129,6 +138,7 @@ class Ui_MainWindow(object):
         self.dataOfBirth.setText(_translate("MainWindow", "2002-22-22"))
         self.email.setText(_translate("MainWindow", "phuc@gmail.com"))
         self.gender.setText(_translate("MainWindow", "Nam"))
+        self.check_in.setText(_translate("MainWindow", "Đã vào"))
 import resources_rc
 
 
