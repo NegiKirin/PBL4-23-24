@@ -608,7 +608,7 @@ QPushButton:pressed {
 }</string>
             </property>
             <property name="currentIndex">
-             <number>4</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page">
              <property name="styleSheet">
@@ -1022,6 +1022,29 @@ background-color: rgb(202, 202, 202);
                   </spacer>
                  </item>
                  <item>
+                  <widget class="QLabel" name="label_tem">
+                   <property name="font">
+                    <font>
+                     <pointsize>12</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel{
+	
+	color: rgb(129, 165, 125);
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>20</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QLabel" name="label_8">
                    <property name="font">
                     <font>
@@ -1037,7 +1060,7 @@ background-color: rgb(202, 202, 202);
 }</string>
                    </property>
                    <property name="text">
-                    <string>20*C</string>
+                    <string>*C</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>
@@ -1061,6 +1084,29 @@ background-color: rgb(202, 202, 202);
                   </spacer>
                  </item>
                  <item>
+                  <widget class="QLabel" name="label_hum">
+                   <property name="font">
+                    <font>
+                     <pointsize>12</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QLabel{
+	
+	color: rgb(115, 120, 212);
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>50</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
                   <widget class="QLabel" name="label_9">
                    <property name="font">
                     <font>
@@ -1076,7 +1122,7 @@ background-color: rgb(202, 202, 202);
 }</string>
                    </property>
                    <property name="text">
-                    <string>50%</string>
+                    <string>%</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignCenter</set>

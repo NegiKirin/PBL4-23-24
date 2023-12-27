@@ -126,6 +126,7 @@ class MainWindow(QMainWindow):
         # all thread
         self.thread = {}
         self.start_capture_video()
+        self.start_tem_hum()
 
 
     def convert_cv_qt(self, cv_img, width, height):
@@ -140,10 +141,22 @@ class MainWindow(QMainWindow):
     def stop_capture_video(self):
         self.thread[1].stop()
 
+    def stop_tem_hum(self):
+        self.thread[2].stop()
+
     def start_capture_video(self):
         self.thread[1] = Capture_Video(index=1)
         self.thread[1].start()
         self.thread[1].signal.connect(self.show_webcam)
+
+    def start_tem_hum(self):
+        self.thread[2] = Tem_Hum(index=2)
+        self.thread[2].start()
+        self.thread[2].signal.connect(self.show_tem_hum)
+
+    def show_tem_hum(self, temhum):
+        self.uic.temperature.setText(str(temhum[0]))
+        self.uic.humidity.setText(str(temhum[1]))
 
     def show_webcam(self, cv_img):
         # Update the image_label with a new opencv image
@@ -154,6 +167,7 @@ class MainWindow(QMainWindow):
     def closeEvent(self, event):
         self.close()
         self.stop_capture_video()
+        self.stop_tem_hum()
 
     #function restore window
     def Window_restore(self):
@@ -1039,6 +1053,23 @@ class Capture_Video(QThread):
     #             self.signal.emit(self.detector.img)
     #     except Exception as e:
     #         print(str(e))
+
+    def stop(self):
+        print('stop threading', self.index)
+        self.terminate()
+
+class Tem_Hum(QThread):
+    signal = pyqtSignal(list)
+
+    def __init__(self, index):
+        self.index = index
+        print('start threading', self.index)
+        super(Tem_Hum, self).__init__()
+
+    def run(self):
+        while True:
+            self.signal.emit([10, 10])
+            time.sleep(1)
 
     def stop(self):
         print('stop threading', self.index)

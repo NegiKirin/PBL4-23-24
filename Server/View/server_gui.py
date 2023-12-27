@@ -13,6 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 current_directory = os.path.dirname(os.path.abspath(__file__)) + '\\'
 
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -528,6 +529,19 @@ class Ui_MainWindow(object):
         self.temperature.setAlignment(QtCore.Qt.AlignCenter)
         self.temperature.setObjectName("temperature")
         self.horizontalLayout_7.addWidget(self.temperature)
+        self.label_42 = QtWidgets.QLabel(self.widget_9)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_42.setFont(font)
+        self.label_42.setStyleSheet("QLabel{\n"
+"    \n"
+"    color: rgb(129, 165, 125);\n"
+"}")
+        self.label_42.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_42.setObjectName("label_42")
+        self.horizontalLayout_7.addWidget(self.label_42)
         spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem3)
         self.humidity = QtWidgets.QLabel(self.widget_9)
@@ -543,6 +557,19 @@ class Ui_MainWindow(object):
         self.humidity.setAlignment(QtCore.Qt.AlignCenter)
         self.humidity.setObjectName("humidity")
         self.horizontalLayout_7.addWidget(self.humidity)
+        self.label_41 = QtWidgets.QLabel(self.widget_9)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_41.setFont(font)
+        self.label_41.setStyleSheet("QLabel{\n"
+"    \n"
+"    color: rgb(115, 120, 212);\n"
+"}")
+        self.label_41.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_41.setObjectName("label_41")
+        self.horizontalLayout_7.addWidget(self.label_41)
         self.verticalLayout_12.addWidget(self.widget_9)
         self.main_camera = QtWidgets.QLabel(self.page_2)
         font = QtGui.QFont()
@@ -1953,8 +1980,10 @@ class Ui_MainWindow(object):
         self.pushButton_5.setText(_translate("MainWindow", "Xem chi tiết"))
         self.label_6.setText(_translate("MainWindow", "TextLabel"))
         self.pushButton_7.setText(_translate("MainWindow", "Xem chi tiết"))
-        self.temperature.setText(_translate("MainWindow", "20*C"))
-        self.humidity.setText(_translate("MainWindow", "50%"))
+        self.temperature.setText(_translate("MainWindow", "20"))
+        self.label_42.setText(_translate("MainWindow", "*C"))
+        self.humidity.setText(_translate("MainWindow", "50"))
+        self.label_41.setText(_translate("MainWindow", "%"))
         self.main_camera.setText(_translate("MainWindow", "Camera"))
         self.btn_search_student.setText(_translate("MainWindow", " Tìm"))
         self.label_10.setText(_translate("MainWindow", "ID"))
